@@ -1,0 +1,90 @@
+topic: >-
+  Signature motif exploration for the Madhavi portfolio (clinical-AI-engineer:
+  MBBS + IIT Madras data science). We are REPLACING the ECG-line idea with a
+  single ownable signature detail that encodes the brand thesis — the interleave
+  of clinical + technical. Motion layer is GSAP 3.13+ (DrawSVG/MorphSVG/SplitText
+  now free). Visual register is editorial-minimal: maroon accent #8B2E2A on cream
+  #FAF9F6, Fraunces serif + Inter sans + JetBrains Mono, hairline weights,
+  prefers-reduced-motion respected, no WebGL/agency maximalism. For each candidate
+  motif, decide ADOPT / STRONG MAYBE / PASS with concrete implementation + honest
+  slop-risk.
+
+# Each item = one candidate signature motif. One deep-research agent per item.
+items:
+
+  - name: Suture stitch line
+    category: line-motif
+    description: >-
+      A surgical suture/stitch drawn as a thin line that "binds" two columns
+      (clinical | technical) — thread crosses over/under a center seam, draws
+      left-to-right on scroll. Medical tie-in without ECG. Evaluate as a section
+      divider replacement and whether the surgical metaphor reads as elegant or gimmicky.
+
+  - name: Interleave weave dual-stream merge
+    category: line-motif
+    description: >-
+      Two hairlines — maroon (clinical) and ink (technical) — braid past each
+      other and resolve into a single stroke. The brand thesis made literal.
+      Evaluate as the most on-thesis option; check for slop risk (generic "braid"
+      loaders) and how to keep it editorial.
+
+  - name: Dual-type kinetic wordmark
+    category: typographic
+    description: >-
+      The "Madhavi" wordmark set half in a serif (Fraunces) and half in mono
+      (JetBrains) — glyphs resolve from two type families into one word on load,
+      driven by GSAP SplitText. Signature is typographic and lives in the nav
+      everywhere (no divider needed). Evaluate versatility and readability.
+
+  - name: Molecular SMILES structural line
+    category: line-motif
+    description: >-
+      A chemical-structure / SMILES-style skeletal line (bonds + nodes) that
+      draws on as a hairline glyph — pharma / drug-discovery / RWE tie-in.
+      Evaluate whether it reads as clever domain-signal or as niche/obscure, and
+      whether it can double as a wordmark ligature.
+
+  - name: Halftone dot-matrix duality
+    category: raster-motif
+    description: >-
+      A field of dots that reads two ways — histology/cell micrograph AND pixel
+      grid — resolving between the two (e.g. dots shift from organic scatter to
+      regular matrix). Encodes clinical microscopy + digital. Evaluate as hero
+      texture / loader; check performance (many nodes) and slop risk.
+
+  - name: Variable-font axis morph glyph
+    category: typographic
+    description: >-
+      A single letter or the monogram set in a variable font whose weight/optical
+      axes "breathe" or morph between a clinical-serif state and a technical-mono
+      state on scroll/hover. Minimal, cheap, type-native. Evaluate distinctiveness
+      vs it being invisible/too subtle.
+
+  - name: Data-stream particle to glyph
+    category: raster-motif
+    description: >-
+      Scattered particles/points that assemble into a meaningful glyph (monogram,
+      or a clinical+technical mark) on load, then disperse. Canvas or SVG.
+      Evaluate against heavy "AI particle" slop — can a restrained hairline
+      version escape the cliche, and what's the perf cost.
+
+  - name: Editorial ink annotation
+    category: typographic
+    description: >-
+      A draw-on ink stroke used like a clinician's margin annotation / chart
+      underline — a hand-weighted maroon underline or circle that draws under key
+      words (name, role) on enter. Ties to medical charting + editorial marginalia.
+      Evaluate as a recurring emphasis device rather than a divider.
+
+  - name: Contour topographic hairline field
+    category: line-motif
+    description: >-
+      Stacked contour/topographic hairlines (like a data terrain or a pressure/
+      isopleth map) that shift subtly — encodes "real-world evidence over a
+      population." Evaluate as background texture vs focal signature, restraint in
+      the editorial register, and whether the meaning lands or is decorative.
+
+execution:
+  batch_size: 5          # parallel deep-research agents at a time
+  items_per_agent: 1     # one motif per agent, full attention
+  output_dir: ./signature-research/results

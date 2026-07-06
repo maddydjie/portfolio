@@ -1,0 +1,52 @@
+# Field definitions for signature-motif deep research.
+# detail_level: brief | moderate | detailed
+# Goal per item: decide whether THIS motif should be the portfolio's single
+# ownable signature. Extract concrete implementation + honest slop-risk, not praise.
+
+categories:
+
+  concept:
+    - name: concept_summary
+      description: What the motif IS in one tight paragraph — the visual form and the core idea it encodes. Static form + the motion it implies.
+      detail_level: detailed
+    - name: brand_thesis_fit
+      description: How well it encodes the site's thesis — the INTERLEAVE of clinical (MBBS) + technical (data science). Does the form literally carry both meanings, or is the tie-in a stretch? Be honest.
+      detail_level: detailed
+    - name: distinctiveness
+      description: Is this ownable and memorable, or a 2024-era design cliche? Where has it been overused (SaaS, agency reels)? What makes a version of it feel earned vs templated.
+      detail_level: detailed
+
+  execution:
+    - name: real_world_examples
+      description: Concrete sites/brands/identities that use this motif well (and badly). URLs where possible. What each does right/wrong. Anti-references matter.
+      detail_level: detailed
+    - name: implementation_technique
+      description: How you actually build it on the web — SVG stroke-dasharray, canvas, WAAPI, path morphing, variable-font axes, etc. The performant path and the naive trap.
+      detail_level: detailed
+    - name: gsap_fit
+      description: Which GSAP tools drive it (DrawSVGPlugin, MorphSVGPlugin, ScrollTrigger, SplitText, Flip, MotionPathPlugin). Note that DrawSVG/MorphSVG/SplitText are now free in GSAP 3.13+. Concrete plugin-to-effect mapping.
+      detail_level: detailed
+
+  fit:
+    - name: versatility
+      description: Where it can appear across the site — section divider, hero moment, nav wordmark, page loader, link hover, 404. A signature must recur sparingly across 2-3 surfaces. Rate its range.
+      detail_level: moderate
+    - name: editorial_restraint
+      description: Can it be done in the editorial-minimal register (maroon #8B2E2A on cream, Fraunces/Inter, hairline weight) WITHOUT sliding into WebGL/agency maximalism? What's the restrained version.
+      detail_level: moderate
+    - name: accessibility_reduced_motion
+      description: prefers-reduced-motion static fallback, contrast, keyboard/focus, no seizure risk. Whether the static (non-animated) form still reads as the signature.
+      detail_level: moderate
+    - name: performance_weight
+      description: Bundle + runtime cost. GSAP plugin weight, SVG vs canvas, paint/layout thrash risk, mobile behavior. Core Web Vitals impact.
+      detail_level: brief
+
+  synthesis:
+    - name: risk_flags
+      description: Honest failure modes — where this reads as slop, medical-cliche, gimmick, or tries too hard. When to NOT use it.
+      detail_level: moderate
+    - name: recommendation
+      description: Verdict as ADOPT / STRONG MAYBE / PASS, a 1-5 score, and one sentence on the single strongest and weakest thing about choosing this as THE signature. Tie to the Madhavi brand constraints.
+      detail_level: detailed
+
+uncertain: []
