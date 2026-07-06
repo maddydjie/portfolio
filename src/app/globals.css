@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/*
+  Design tokens — source of truth is docs/Brand_Kit.md §3–4.
+  Do NOT hardcode colors, type sizes, or spacing in components; use these tokens.
+  Warm paper + ink + one blood-maroon accent. No blues/purples/gradients.
+*/
+@theme {
+  /* --- color --- */
+  --color-background: #faf9f6;
+  --color-foreground: #0e1116;
+  --color-muted-foreground: #5a5a5a;
+  --color-accent: #8b2e2a;
+  --color-accent-hover: #6f2320;
+  --color-surface: #f3f1ea;
+  --color-border: #e5e1d8;
+  --color-success: #2d6a4f;
+  --color-warning: #9a6a00;
+
+  /* --- type families --- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-mono: var(--font-mono), ui-monospace, "JetBrains Mono", monospace;
+
+  /* --- type scale (size + line-height), Brand_Kit §4 --- */
+  --text-hero-lg: 3.5rem; /* 56 */
+  --text-hero-lg--line-height: 1.05;
+  --text-hero: 2.5rem; /* 40 */
+  --text-hero--line-height: 1.1;
+  --text-h2: 2rem; /* 32 */
+  --text-h2--line-height: 1.2;
+  --text-h3: 1.375rem; /* 22 */
+  --text-h3--line-height: 1.3;
+  --text-body: 1.0625rem; /* 17 */
+  --text-body--line-height: 1.65;
+  --text-small: 0.875rem; /* 14 */
+  --text-small--line-height: 1.5;
+  --text-mono: 0.9375rem; /* 15 */
+  --text-mono--line-height: 1.6;
+
+  /* --- layout: section rhythm + reading/index widths, Brand_Kit §8 --- */
+  --spacing-section: 6rem; /* 96 desktop */
+  --spacing-section-sm: 4rem; /* 64 mobile */
+  --container-reading: 42rem; /* 672 prose */
+  --container-wide: 75rem; /* 1200 galleries/index */
+}
+
+/* Fraunces stylistic set + optical sizing on the serif, Brand_Kit §4. */
+:root {
+  --serif-features: "ss01";
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-optical-sizing: auto;
+    font-feature-settings: var(--serif-features);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  code,
+  pre,
+  kbd {
+    font-family: var(--font-mono);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  /* Accessible focus — never bare outline:none (PRD interaction rules). */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  }
+}
