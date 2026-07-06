@@ -1,0 +1,75 @@
+# Field definitions for deep research. detail_level: brief | moderate | detailed
+# Goal per item: extract concrete, STEALABLE patterns — not vague praise.
+
+categories:
+
+  identity_and_hero:
+    - name: hero
+      description: Layout of the opening screen, name/role treatment, what signals credibility in the first 5 seconds.
+      detail_level: detailed
+    - name: wordmark_identity
+      description: How the name is set (logotype, monogram, kinetic/variable type). Whether a graphic doubles as identity. Relevant to ECG-as-ligature idea.
+      detail_level: moderate
+    - name: signature_detail
+      description: The single ownable, memorable element (a glyph, motion, tone). How it is used with restraint. Direct input to the ECG signature.
+      detail_level: detailed
+
+  typography_and_layout:
+    - name: typography
+      description: Serif/sans pairing, type scale, editorial devices (tracking, optical sizing, tabular figures). Note any Fraunces/Inter-adjacent pairing.
+      detail_level: detailed
+    - name: whitespace_layout
+      description: Vertical rhythm, reading width, grid, alignment. How "designed not templated" is achieved.
+      detail_level: moderate
+    - name: color_accent_discipline
+      description: Single-accent usage, % of visual field, restraint. How accent behaves across sections.
+      detail_level: moderate
+    - name: light_dark_tone
+      description: Light/dark mode + tone system. Whether a single accent (maroon) holds across themes; dark-mode-makes-work-pop pattern.
+      detail_level: brief
+
+  motion:
+    - name: motion
+      description: Entrance/exit timing, scroll behavior, hover states, restraint. Transform/opacity discipline, easing quality.
+      detail_level: detailed
+    - name: reduced_motion_a11y
+      description: Explicit prefers-reduced-motion handling + static fallbacks; keyboard/focus, contrast. Load-bearing for ECG animation + clinical credibility.
+      detail_level: moderate
+
+  content_presentation:
+    - name: project_presentation
+      description: Cards vs list, deep-dive density, how real artifacts (repos, demos, screenshots) are shown.
+      detail_level: detailed
+    - name: research_artifact_presentation
+      description: How papers, publications, talks, model cards are displayed — citations, PDFs, venue metadata. Distinct from generic projects.
+      detail_level: moderate
+    - name: writing_blog_integration
+      description: Whether/how a writing surface fuses with the portfolio; essay index vs work coexistence, feed density, CMS strategy.
+      detail_level: moderate
+    - name: photography_imagery
+      description: How personal media/photography coexists with technical work without dominating.
+      detail_level: moderate
+
+  navigation_and_conversion:
+    - name: navigation
+      description: Structure, wordmark placement, stickiness, order of items.
+      detail_level: brief
+    - name: trust_credibility
+      description: How affiliations, publications, collaborators, credentials are surfaced without cluttering the hero.
+      detail_level: brief
+    - name: contact_conversion
+      description: How a visitor is turned into email/booking (CTA placement, Cal.com, contact patterns).
+      detail_level: brief
+
+  engineering:
+    - name: performance_weight
+      description: Page weight, font-loading strategy (variable fonts, FOUT for Fraunces/Inter), Core Web Vitals as a design constraint.
+      detail_level: brief
+
+  synthesis:
+    - name: takeaway
+      description: One concrete thing to STEAL and one to AVOID for the Madhavi build, tied to the brand constraints (editorial-minimal, maroon, ECG, clinical+technical).
+      detail_level: detailed
+
+# reserved — auto-filled during deep phase for values that can't be verified
+uncertain: []

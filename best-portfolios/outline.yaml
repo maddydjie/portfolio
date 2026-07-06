@@ -1,0 +1,96 @@
+topic: >-
+  Best personal portfolio websites for a clinical-AI-engineer / developer-designer.
+  Extract concrete, reusable design + interaction patterns to inform an
+  editorial-minimal portfolio with a maroon accent (#8B2E2A), Fraunces/Inter
+  type, and an ECG signature detail.
+
+# Research objects. Each gets one deep-research agent (batched).
+items:
+
+  # --- Design-engineer / developer craft (closest peer group) ---
+  - name: Brittany Chiang
+    url: https://brittanychiang.com
+    note: Canonical dev portfolio. Split-scroll layout, restrained accent, project list.
+  - name: Rauno Freiberg
+    url: https://rauno.me
+    note: Craft/interaction-detail master. Tone system, micro-interactions, dark mode.
+  - name: Emil Kowalski
+    url: https://emilkowal.ski
+    note: Ex-Vercel/Linear design engineer. Reference for restrained high-craft motion + reduced-motion discipline.
+  - name: Josh Comeau
+    url: https://joshwcomeau.com
+    note: Playful motion + craft. How far to push whimsy without slop.
+  - name: Paco Coursey
+    url: https://paco.me
+    note: Restrained, typographic, minimal.
+  - name: Lee Robinson
+    url: https://leerob.com
+    note: Editorial-minimal dev, writing + work fused.
+  - name: Clement Grellier
+    url: https://clementgrellier.fr
+    note: Pixel-perfect, fluid motion, minimal — micro-interaction restraint model.
+  - name: Jordan Delcros
+    url: https://jordan-delcros.com
+    note: ANTI-REFERENCE. WebGL/generative — calibrate how far a signature graphic can go.
+
+  # --- Content-first researcher / writer (matches clinical-AI identity) ---
+  - name: Andrej Karpathy
+    url: https://karpathy.ai
+    note: Minimal, content-first, research-index. First-5-sec credibility with no chrome.
+  - name: Simon Willison
+    url: https://simonwillison.net
+    note: Dense, writing-led, no-fluff. Feed density + artifact linking.
+  - name: Clarity AI-research template
+    url: https://shikun.io/projects/clarity
+    note: Open-source template for AI research — papers/projects/links calm layout. Research-artifact reference.
+  - name: kozodoi/website
+    url: https://github.com/kozodoi/website
+    note: AI blog w/ talks, papers, work. Cloneable writing-led + research-index pattern.
+  - name: Darpan Jain
+    url: https://darpanjain.com
+    note: AI-researcher clean content-first: bio + publications + projects balance.
+
+  # --- Editorial / studio (type + whitespace) ---
+  - name: Studio Herrstrom
+    url: https://studioherrstrom.com
+    note: Ex-Spotify brand director. Wordmark/identity treatment as signature.
+  - name: Obys Agency
+    url: https://des.obys.agency
+    note: Refined typography as installation. Sample sparingly — high-end editorial motion.
+  - name: Pentagram
+    url: https://pentagram.com
+    note: Type + whitespace + work-index rhythm reference.
+
+  # --- High-craft anti-references (calibration) ---
+  - name: Bruno Simon
+    url: https://bruno-simon.com
+    note: ANTI-REFERENCE. Full 3D game portfolio — the ceiling of "too much."
+  - name: Stas Bondar
+    url: https://stabondar.com
+    note: ANTI-REFERENCE. GSAP/Three.js maximal interaction.
+
+  # --- Editorial templates (cloneable, match stack) ---
+  - name: Framer Vertical + Sharp templates
+    url: https://www.bryntaylor.co.uk/writing/best-framer-portfolio-templates
+    note: Vertical = typography-driven storytelling; Sharp = editorial + blog/CMS for work+writing.
+  - name: Webflow BERGEN / Mokat / Lucide / Teo templates
+    url: https://www.bryntaylor.co.uk/writing/best-webflow-portfolio-templates
+    note: Oversized-type magazine-spread project pages + generous-whitespace typographic rhythm.
+
+  # --- Signature-detail technique (ECG implementation path) ---
+  - name: Animated SVG signature (stroke-dasharray)
+    url: https://dev.to/starbist/animated-svg-signature-1h46
+    note: Concrete performant draw-on technique for the ECG glyph. Load + scroll draw, static reduced-motion fallback, potential wordmark ligature.
+
+# Living curation sources (mine continuously, NOT per-item deep research)
+reference_galleries:
+  - Muzli 100 Best Designer Portfolios 2026: https://muz.li
+  - SEESAW: https://www.seesaw.website
+  - Killer Portfolio: https://www.killerportfolio.com
+  - Minimal.gallery: https://minimal.gallery
+  - Typewolf (real-world Fraunces/Inter pairings): https://www.typewolf.com
+
+execution:
+  batch_size: 6          # parallel deep-research agents at a time
+  items_per_agent: 2     # ~11 agents total across 21 items
+  output_dir: ./best-portfolios/results
