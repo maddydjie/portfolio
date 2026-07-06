@@ -9,7 +9,7 @@
     "lint": "biome check .",
     "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
-    "preflight": "pnpm lint && pnpm typecheck && pnpm build"
+    "preflight": "biome check . && tsc --noEmit && next build"
   },
   "dependencies": {
     "next": "16.2.10",
