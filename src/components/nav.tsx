@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Wordmark } from "@/components/signature/wordmark";
 
 const items = [
   ["Work", "/work"],
@@ -12,8 +13,8 @@ export function Nav() {
   return (
     <header className="w-full border-b border-border">
       <nav className="mx-auto flex max-w-wide items-center justify-between px-6 py-5">
-        <Link href="/" className="font-serif text-h3 tracking-tight">
-          Madhavi
+        <Link href="/" className="text-h3" aria-label="Madhavi — home">
+          <Wordmark animate className="text-h3" />
         </Link>
         <ul className="hidden items-center gap-6 text-small sm:flex">
           {items.map(([label, href]) => (
