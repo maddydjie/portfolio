@@ -43,12 +43,13 @@ Work is first (professional priority). Photography is second (the human hook), n
 - **Icons:** lucide-react
 - **Fonts:** Fraunces (serif), Inter (sans), JetBrains Mono (mono) — via `next/font/google`
 - **Syntax highlighting:** shiki via rehype-pretty-code
+- **Motion:** GSAP 3.13+ is the motion layer (SplitText/DrawSVG/ScrollTrigger).
 - **Linter/formatter:** Biome (not ESLint + Prettier)
 - **Analytics:** Vercel Analytics
 - **Hosting:** Vercel, auto-deploy from `main`
 - **Package manager:** pnpm
 
-**Do not install:** framer-motion, three.js, gsap, sanity, contentful, mongoose, any auth library, any CMS SDK.
+**Do not install:** framer-motion, three.js, sanity, contentful, mongoose, any auth library, any CMS SDK.
 
 ## Commands
 
@@ -127,7 +128,7 @@ Rules:
 
 ## Distinctive detail
 
-Implement a subtle ECG-line section divider (`components/ecg-divider.tsx`) as the site's signature detail — a thin animated pulse line used sparingly as a divider. It ties the owner's cardiac-monitoring work into the visual identity. Subtle, respects prefers-reduced-motion, used at most 2-3 times across the whole site.
+The signature is now a layered system — dual-type wordmark (primary), interleave-weave divider (replaces ECG), ink annotation (emphasis). Reference `docs/superpowers/specs/2026-07-06-signature-system-and-landing-design.md`.
 
 ## Working style
 
