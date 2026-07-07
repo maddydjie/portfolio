@@ -30,9 +30,9 @@ export function Wordmark({
       gsap.from(chars, {
         opacity: 0,
         y: "0.25em",
-        duration: 0.32,
+        duration: 0.24,
         ease: "power3.out",
-        stagger: 0.03,
+        stagger: 0.02,
       });
     }, el);
     sessionStorage.setItem(SESSION_KEY, "1");
@@ -41,8 +41,7 @@ export function Wordmark({
 
   const chars = NAME.split("");
   return (
-    // biome-ignore lint/a11y/useAriaPropsSupportedByRole: composed accessible name for decorative character spans
-    <span ref={ref} aria-label={NAME} className={`inline-flex ${className}`}>
+    <span ref={ref} role="img" aria-label={NAME} className={`inline-flex ${className}`}>
       {chars.map((ch, i) => (
         <span
           // biome-ignore lint/suspicious/noArrayIndexKey: fixed static string
