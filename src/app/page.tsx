@@ -1,17 +1,14 @@
 import Link from "next/link";
-import { Hero } from "@/components/hero";
+import { HeroA } from "@/components/hero/hero-a";
 import { Section } from "@/components/section";
 import { WeaveDivider } from "@/components/signature/weave-divider";
 import { WorkRow } from "@/components/work-row";
 import { FEATURED } from "@/content/landing";
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ v?: string }> }) {
-  const { v } = await searchParams;
-  const variant = v === "b" || v === "c" ? v : "a";
-
+export default function Home() {
   return (
     <>
-      <Hero variant={variant} />
+      <HeroA />
 
       <WeaveDivider />
 
