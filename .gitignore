@@ -39,3 +39,8 @@ next-env.d.ts
 
 # testing / research scratch
 /best-portfolios/results/*.json.bak
+
+# playwright MCP + local screenshot scratch
+.playwright-mcp/
+*-check-*.png
+wordmark-*.png
