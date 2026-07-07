@@ -43,7 +43,7 @@ Work is first (professional priority). Photography is second (the human hook), n
 - **Icons:** lucide-react
 - **Fonts:** Fraunces (serif), Inter (sans), JetBrains Mono (mono) — via `next/font/google`
 - **Syntax highlighting:** shiki via rehype-pretty-code
-- **Motion:** GSAP 3.13+ is the motion layer (SplitText/DrawSVG/ScrollTrigger).
+- **Motion:** GSAP 3.13+ is the motion layer (DrawSVG/ScrollTrigger).
 - **Linter/formatter:** Biome (not ESLint + Prettier)
 - **Analytics:** Vercel Analytics
 - **Hosting:** Vercel, auto-deploy from `main`

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 
@@ -12,6 +12,7 @@ const TECHNICAL = "M0 20 C 30 20, 40 32, 60 20 S 90 8, 108 20 S 138 32, 150 20 L
 
 export function WeaveDivider({ className = "" }: { className?: string }) {
   const rootRef = useRef<SVGSVGElement>(null);
+  const maskId = useId().replace(/:/g, "");
 
   useEffect(() => {
     registerGsap();
@@ -54,7 +55,7 @@ export function WeaveDivider({ className = "" }: { className?: string }) {
         <defs>
           {/* mask punches small gaps in the under-strand at each crossing so it
               reads as passing BEHIND — without this it's a flat X, not a weave. */}
-          <mask id="weave-over-under">
+          <mask id={maskId}>
             <rect x="0" y="0" width="240" height="40" fill="white" />
             <circle cx="60" cy="20" r="4" fill="black" />
             <circle cx="108" cy="20" r="4" fill="black" />
@@ -67,7 +68,7 @@ export function WeaveDivider({ className = "" }: { className?: string }) {
           stroke="var(--color-foreground)"
           strokeWidth="1.25"
           strokeLinecap="round"
-          mask="url(#weave-over-under)"
+          mask={`url(#${maskId})`}
         />
         <path
           data-strand
