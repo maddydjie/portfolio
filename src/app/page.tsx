@@ -1,7 +1,7 @@
-import { EcgDivider } from "@/components/ecg-divider";
 import { ProjectCard } from "@/components/project-card";
 import { Prose } from "@/components/prose";
 import { Section } from "@/components/section";
+import { WeaveDivider } from "@/components/signature/weave-divider";
 import { Tag } from "@/components/tag";
 
 // Scaffold harness — primitives with PLACEHOLDER content only.
@@ -43,7 +43,7 @@ export default function Home() {
         </div>
       </Section>
 
-      <EcgDivider />
+      <WeaveDivider />
 
       <Section width="wide" as="div">
         <h2 id="work" className="text-h2">
