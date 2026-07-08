@@ -13,7 +13,8 @@
 - **Tokens only** — use `@theme` vars. New hero-scoped tokens: `--color-hero-bg: #14120E`, `--color-hero-fg: #f1eee6`, `--color-hero-muted: #a39c8e`, `--color-hero-accent: #d97a6c`, and `--text-hero-xl` (clamp). No hardcoded color elsewhere.
 - **GSAP client-only** — every file importing gsap starts with `"use client"`; register once via `registerGsap()`, browser-guarded.
 - **Reduced motion is load-bearing & universal** — every timeline/ScrollTrigger/canvas checks `prefersReducedMotion()`; when set, render the final state / paint one static frame. The reduced-motion landing must still look bold and deliberate.
-- **Canvas discipline** — 2D only (no WebGL); cap `devicePixelRatio` at 2; pause rAF offscreen via IntersectionObserver; cap element counts (hero ≤ ~400, each project ≤ ~200); all canvases `aria-hidden` + `pointer-events:none`.
+- **Canvas discipline** — the per-project accent visuals are **2D canvas** (no WebGL): cap `devicePixelRatio` at 2; pause rAF offscreen via IntersectionObserver; cap element counts (each project ≤ ~200); all canvases `aria-hidden` + `pointer-events:none`.
+- **Hero 3D object** — the hero centerpiece is a **WebGL** chrome torus-knot via React Three Fiber (`three`, `@react-three/fiber`, `@react-three/drei`). Amends `CLAUDE.md`'s "Do not install: three.js". Dynamically imported (`ssr: false`), `dpr={[1,2]}`, `aria-hidden`, `pointer-events:none`; under reduced motion `frameloop="demand"` → one static render.
 - **Dark hero is section-scoped**, NOT a dark-mode toggle. Content below stays cream. Nav flips cream→ink at the seam; focus ring visible on both grounds.
 - **One `<h1>`** (hero wordmark inside `<h1>`, name "Madhavi" via role="img"); `<h2>` per section. Nav accessible name stays "Madhavi".
 - **Images:** Next `<Image>` only. Headshot target `public/headshot.webp` (≤2000px, <400KB); ship a placeholder now.
@@ -237,121 +238,97 @@ git commit -m "feat: 2D canvas harness (DPR cap, offscreen pause, reduced-motion
 
 ---
 
-### Task 3: Hero ambient field (`hero-field.tsx`)
+### Task 3: 3D chrome-knot signature (React Three Fiber)
 
 **Files:**
-- Create: `src/components/visual/hero-field.tsx`
+- Modify: `package.json` (add `three`, `@react-three/fiber`, `@react-three/drei`, `@types/three`)
+- Modify: `.claude/CLAUDE.md` (remove `three.js` from the do-not-install list)
+- Create: `src/components/visual/chrome-knot.tsx`
 
 **Interfaces:**
-- Consumes: `mountCanvas`, `CanvasDraw` (Task 2).
-- Produces: `<HeroField className?: string />` — an aria-hidden full-size canvas of drifting hairline points that lerp toward the cursor. Renders one static frame under reduced motion.
+- Consumes: `prefersReducedMotion` (`src/lib/motion.ts`).
+- Produces: `<ChromeKnot className?: string />` — an aria-hidden R3F `<Canvas>` rendering a slowly-rotating chrome torus-knot (the interleave-weave as a 3D braided knot) with maroon-tinted reflections. Reduced motion → single static render.
 
-- [ ] **Step 1: Write the component**
+Design: the object IS the signature in 3D — a torus-knot (`p=2, q=3`, a trefoil braid) in a chrome material (metalness 1, low roughness) lit by drei `<Lightformer>`s inside `<Environment>` (NO external HDR/CDN — reflections come from in-scene lightformers, keeping it self-contained). Slow auto-rotation + subtle cursor parallax. Transparent background so it floats over the dark hero.
 
-Create `src/components/visual/hero-field.tsx`:
+- [ ] **Step 1: Install the 3D deps** (ASK before running, per CLAUDE.md — the owner approved React Three Fiber)
+
+Run (project workflow):
+`NPM_CONFIG_REGISTRY=https://registry.npmjs.org/ COREPACK_NPM_REGISTRY=https://registry.npmjs.org/ corepack pnpm@latest add three @react-three/fiber @react-three/drei --registry=https://registry.npmjs.org/`
+then dev-dep types:
+`corepack pnpm@latest add -D @types/three --registry=https://registry.npmjs.org/`
+Expected: the four packages land in `package.json`. (If `three`'s peer wants a specific React version, `@react-three/fiber` v9 supports React 19 — confirm fiber ≥ 9 resolves; if it pins React 18, report back before forcing.)
+
+- [ ] **Step 2: Amend the constitution**
+
+In `.claude/CLAUDE.md`, remove `three.js` from the `**Do not install:**` line (keep framer-motion and the rest). Add a short note under the tech-stack that React Three Fiber powers the hero 3D signature object.
+
+- [ ] **Step 3: Write the component**
+
+Create `src/components/visual/chrome-knot.tsx`:
 
 ```tsx
 "use client";
 
-import { useEffect, useRef } from "react";
-import { type CanvasDraw, mountCanvas } from "./canvas-base";
+import { Environment, Lightformer } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import type { Mesh } from "three";
+import { prefersReducedMotion } from "@/lib/motion";
 
-// ~360 drifting points in hero-accent/hero-fg; faint links to near neighbours.
-// A "signal + data" atmosphere echoing the weave. Cursor gently attracts.
-const COUNT = 360;
-
-export function HeroField({ className = "" }: { className?: string }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-
-    const pts = Array.from({ length: COUNT }, () => ({
-      x: Math.random(),
-      y: Math.random(),
-      vx: (Math.random() - 0.5) * 0.0006,
-      vy: (Math.random() - 0.5) * 0.0006,
-    }));
-    const pointer = { x: 0.5, y: 0.5, active: false };
-
-    const onMove = (e: PointerEvent) => {
-      const r = canvas.getBoundingClientRect();
-      pointer.x = (e.clientX - r.left) / r.width;
-      pointer.y = (e.clientY - r.top) / r.height;
-      pointer.active = true;
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-
-    const draw: CanvasDraw = (ctx, w, h) => {
-      ctx.clearRect(0, 0, w, h);
-      for (const p of pts) {
-        if (pointer.active) {
-          p.vx += (pointer.x - p.x) * 0.00002;
-          p.vy += (pointer.y - p.y) * 0.00002;
-        }
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vx *= 0.99;
-        p.vy *= 0.99;
-        if (p.x < 0 || p.x > 1) p.vx *= -1;
-        if (p.y < 0 || p.y > 1) p.vy *= -1;
-        p.x = Math.max(0, Math.min(1, p.x));
-        p.y = Math.max(0, Math.min(1, p.y));
-      }
-      // faint links
-      ctx.strokeStyle = "rgba(217,122,108,0.10)";
-      ctx.lineWidth = 1;
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = (pts[i].x - pts[j].x) * w;
-          const dy = (pts[i].y - pts[j].y) * h;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < 90 * 90) {
-            ctx.globalAlpha = 1 - Math.sqrt(d2) / 90;
-            ctx.beginPath();
-            ctx.moveTo(pts[i].x * w, pts[i].y * h);
-            ctx.lineTo(pts[j].x * w, pts[j].y * h);
-            ctx.stroke();
-          }
-        }
-      }
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "rgba(241,238,230,0.55)";
-      for (const p of pts) {
-        ctx.beginPath();
-        ctx.arc(p.x * w, p.y * h, 1.1, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    };
-
-    const cleanup = mountCanvas(canvas, draw);
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      cleanup();
-    };
-  }, []);
-
+function Knot({ reduce }: { reduce: boolean }) {
+  const ref = useRef<Mesh>(null);
+  useFrame((state, delta) => {
+    const m = ref.current;
+    if (!m || reduce) return;
+    m.rotation.x += delta * 0.14;
+    m.rotation.y += delta * 0.2;
+    // subtle cursor parallax (pointer is -1..1)
+    m.rotation.z += (state.pointer.x * 0.25 - m.rotation.z) * 0.05;
+  });
   return (
-    <canvas
-      ref={ref}
-      aria-hidden="true"
-      className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}
-    />
+    <mesh ref={ref} rotation={[0.3, 0.2, 0]}>
+      {/* torus-knot p=2,q=3 = a trefoil braid — the weave in 3D */}
+      <torusKnotGeometry args={[1, 0.34, 240, 32, 2, 3]} />
+      <meshStandardMaterial color="#d97a6c" metalness={1} roughness={0.08} envMapIntensity={1.5} />
+    </mesh>
+  );
+}
+
+export function ChromeKnot({ className = "" }: { className?: string }) {
+  const reduce = prefersReducedMotion();
+  return (
+    <Canvas
+      aria-hidden
+      dpr={[1, 2]}
+      frameloop={reduce ? "demand" : "always"}
+      camera={{ position: [0, 0, 4.4], fov: 42 }}
+      gl={{ antialias: true, alpha: true }}
+      className={`pointer-events-none !absolute inset-0 ${className}`}
+    >
+      <ambientLight intensity={0.35} />
+      <Knot reduce={reduce} />
+      {/* self-contained reflections — no external HDR/CDN */}
+      <Environment resolution={128}>
+        <Lightformer intensity={2.2} position={[3, 3, 2]} scale={[5, 5, 1]} />
+        <Lightformer intensity={1.3} color="#8b2e2a" position={[-4, 1, 1]} scale={[4, 4, 1]} />
+        <Lightformer intensity={1.6} position={[0, -3, 2]} scale={[6, 3, 1]} />
+      </Environment>
+    </Canvas>
   );
 }
 ```
 
-> Perf note: the O(n²) link loop at n=360 is ~65k checks/frame — acceptable on desktop. If the hero-gut-check (Task 4) shows jank on mobile, reduce `COUNT` to ~180 below 768px (read `window.innerWidth` once in the effect) — implement only if the gut-check flags it.
+> Perf/SSR: this is client + WebGL — it is consumed via a `dynamic(..., { ssr: false })` import in the hero (Task 4), so it never enters the server render. Reduced motion sets `frameloop="demand"` → R3F renders once and idles. If the gut-check shows the knot too large/small, tune `torusKnotGeometry` radius or camera `position[2]`.
 
-- [ ] **Step 2: Verify + commit**
+- [ ] **Step 4: Verify + commit**
 
-Run: `corepack pnpm@latest typecheck && corepack pnpm@latest lint`
-Expected: pass.
+Run: `corepack pnpm@latest typecheck && corepack pnpm@latest build && corepack pnpm@latest lint`
+Expected: all pass. (Build must succeed with the WebGL component tree-shaken behind the dynamic import; if `three` triggers a server-side `window` error, confirm the dynamic `ssr:false` import in Task 4 — this component is never imported statically by a server file.)
 
 ```bash
-git add src/components/visual/hero-field.tsx
-git commit -m "feat: hero ambient signal-field canvas"
+git add package.json pnpm-lock.yaml .claude/CLAUDE.md src/components/visual/chrome-knot.tsx
+git commit -m "feat: 3D chrome torus-knot hero signature (React Three Fiber); un-ban three.js"
 ```
 
 ---
@@ -359,16 +336,30 @@ git commit -m "feat: hero ambient signal-field canvas"
 ### Task 4: Cinematic hero (`hero-cinematic.tsx`) + temporary mount for gut-check
 
 **Files:**
+- Create: `public/hero-portrait-placeholder.svg`
 - Create: `src/components/hero/hero-cinematic.tsx`
 - Modify: `src/app/page.tsx` (temporarily render `<HeroCinematic />` at top for the gut-check)
 
 **Interfaces:**
-- Consumes: `Wordmark` (Spec 1; renders `[data-ch]` spans, use `animate={false}`), `HeroField`, `registerGsap`/`gsap`, `prefersReducedMotion`, `playOncePerSession`, `wireSkip`, `POSITIONING`, `AFFILIATIONS`.
-- Produces: `<HeroCinematic />` — a dark full-bleed hero with an on-load GSAP timeline.
+- Consumes: `Wordmark` (Spec 1; renders `[data-ch]` spans, no `animate` prop), `ChromeKnot` (Task 3, via `dynamic ssr:false`), `registerGsap`/`gsap`, `prefersReducedMotion`, `playOncePerSession`, `wireSkip`, `POSITIONING`, `AFFILIATIONS`, Next `Image`.
+- Produces: `<HeroCinematic />` — a dark full-bleed hero with the 3D chrome knot, a small moody portrait, mono corner labels, and an on-load GSAP timeline.
 
-Design: dark section (`bg-hero-bg`), min-h ~92vh, `HeroField` behind, an `<h1>` wrapping the giant `Wordmark` (`text-hero-xl`), the positioning line split into word-spans, the affiliation strip, a scroll cue. On mount: if reduced-motion → `gsap.set` everything to final; else build a once-per-session timeline (letters assemble → words reveal → affiliations/cue fade), skippable via `wireSkip`.
+Design: dark section (`bg-hero-bg`), min-h ~92vh. `ChromeKnot` floats in the right half (dynamic, ssr:false, desktop only). Left: `<h1>` wrapping the giant `Wordmark` (`text-hero-xl`), the positioning line as word-spans, a small moody b&w portrait beside the affiliation strip, a scroll cue. Mono corner labels absolute-positioned. On mount: reduced-motion / already-played → `gsap.set` final; else once-per-session timeline (letters assemble → words reveal → fades), skippable.
 
-- [ ] **Step 1: Write the component**
+- [ ] **Step 1: Hero portrait placeholder**
+
+Create `public/hero-portrait-placeholder.svg` (a small dark moody square; real target `public/hero-portrait.webp`):
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#1d1a15"/>
+  <circle cx="200" cy="170" r="66" fill="#2e2a22"/>
+  <path d="M96 400 C 96 300, 304 300, 304 400 Z" fill="#2e2a22"/>
+  <text x="200" y="380" text-anchor="middle" font-family="monospace" font-size="16" fill="#5a5348">hero-portrait.webp</text>
+</svg>
+```
+
+- [ ] **Step 2: Write the component**
 
 Create `src/components/hero/hero-cinematic.tsx`:
 
@@ -376,12 +367,19 @@ Create `src/components/hero/hero-cinematic.tsx`:
 "use client";
 
 import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import { Wordmark } from "@/components/signature/wordmark";
-import { HeroField } from "@/components/visual/hero-field";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 import { playOncePerSession, wireSkip } from "@/lib/timeline";
 import { AFFILIATIONS, POSITIONING } from "@/content/landing";
+
+// WebGL knot: client + browser-only, never server-rendered.
+const ChromeKnot = dynamic(
+  () => import("@/components/visual/chrome-knot").then((m) => m.ChromeKnot),
+  { ssr: false },
+);
 
 const WORDS = POSITIONING.split(" ");
 
@@ -422,7 +420,10 @@ export function HeroCinematic() {
       ref={root}
       className="relative flex min-h-[92vh] flex-col justify-center overflow-hidden bg-hero-bg px-6 text-hero-fg"
     >
-      <HeroField />
+      {/* 3D chrome signature, floating right (desktop) */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 md:block" aria-hidden="true">
+        <ChromeKnot />
+      </div>
       <div className="relative mx-auto w-full max-w-wide">
         <h1 className="text-hero-xl leading-[0.92]">
           <Wordmark className="text-hero-xl" />
@@ -440,37 +441,52 @@ export function HeroCinematic() {
             </span>
           ))}
         </p>
-        <p data-fade className="mt-6 font-mono text-hero-muted text-small">
-          {AFFILIATIONS.join("  ·  ")}
-        </p>
-        <p data-fade className="mt-16 font-mono text-hero-muted text-small tracking-widest">
+        <div data-fade className="mt-8 flex items-center gap-4">
+          <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-sm border border-hero-muted/30">
+            <Image
+              src="/hero-portrait-placeholder.svg"
+              alt="Portrait of BVS Madhavi"
+              fill
+              sizes="64px"
+              className="object-cover [filter:grayscale(1)_contrast(1.1)]"
+            />
+          </div>
+          <p className="font-mono text-hero-muted text-small">{AFFILIATIONS.join("  ·  ")}</p>
+        </div>
+        <p data-fade className="mt-14 font-mono text-hero-muted text-small tracking-widest">
           scroll ↓
         </p>
       </div>
+
+      {/* editorial corner meta-labels */}
+      <span className="absolute bottom-6 left-6 font-mono text-hero-muted text-small">©2026</span>
+      <span className="absolute right-6 bottom-6 font-mono text-hero-muted text-small tracking-wide">
+        MBBS · IIT MADRAS
+      </span>
     </section>
   );
 }
 ```
 
-> Note: `Wordmark` already renders `[data-ch]` spans and, with `animate={false}` (the default), does not run its own nav animation — the hero timeline drives those spans instead. Pass no `animate` prop.
+> Notes: `Wordmark` with no `animate` prop renders static `[data-ch]` spans that the hero timeline drives. The `ChromeKnot` is hidden below `md` (mobile gets the type-led hero without WebGL cost); if the gut-check wants it on mobile, drop `hidden md:block`. The portrait + corner labels are part of the `data-fade` reveal / static ground.
 
-- [ ] **Step 2: Temporarily mount for the gut-check**
+- [ ] **Step 3: Temporarily mount for the gut-check**
 
 In `src/app/page.tsx`, import `HeroCinematic` and render it as the FIRST child (above the existing `<HeroA />`), leaving the rest for now. This is interim — full assembly is Task 10.
 
-- [ ] **Step 3: Verify build**
+- [ ] **Step 4: Verify build**
 
 Run: `corepack pnpm@latest typecheck && corepack pnpm@latest build && corepack pnpm@latest lint`
-Expected: all pass.
+Expected: all pass (the `dynamic ssr:false` import keeps the WebGL knot out of the server render).
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add src/components/hero/hero-cinematic.tsx src/app/page.tsx
-git commit -m "feat: cinematic dark type-reveal hero"
+git add public/hero-portrait-placeholder.svg src/components/hero/hero-cinematic.tsx src/app/page.tsx
+git commit -m "feat: cinematic dark type-reveal hero (chrome knot, portrait, corner labels)"
 ```
 
-> **CONTROLLER GUT-CHECK AFTER THIS TASK:** production build + `next start`, headless-Chrome screenshot at 1920 (reduced-motion for a deterministic end-frame) + a normal-motion DOM/state check that the timeline runs and settles; confirm the dark hero + giant wordmark + word reveal + field read as "awe," no overflow, field paints. Get owner thumbs-up before Tasks 5-10.
+> **CONTROLLER GUT-CHECK AFTER THIS TASK:** production build + `next start`, headless-Chrome screenshot at 1920 (reduced-motion for a deterministic end-frame) + a normal-motion DOM/state check that the timeline runs and settles and the WebGL knot renders; confirm the dark hero + giant wordmark + word reveal + chrome knot + portrait read as "awe," no overflow. Get owner thumbs-up before Tasks 5-10.
 
 ---
 
@@ -1059,12 +1075,14 @@ export function Nav() {
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled ? "border-border border-b bg-background/90 text-foreground backdrop-blur" : "text-hero-fg"
-      }`}
-    >
-      <nav className="mx-auto flex max-w-wide items-center justify-between px-6 py-5">
+    <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
+      <nav
+        className={`flex w-full max-w-wide items-center justify-between rounded-full border px-5 py-3 transition-colors duration-300 ${
+          scrolled
+            ? "border-border bg-background/85 text-foreground backdrop-blur"
+            : "border-hero-fg/15 bg-hero-bg/40 text-hero-fg backdrop-blur-sm"
+        }`}
+      >
         <Link href="/" className="text-h3" aria-label="Madhavi — home">
           <Wordmark animate className="text-h3" />
         </Link>
@@ -1073,7 +1091,7 @@ export function Nav() {
             <li key={href}>
               <Link
                 href={href}
-                className="opacity-80 transition-opacity hover:opacity-100 hover:text-accent"
+                className="opacity-80 transition-opacity hover:text-accent hover:opacity-100"
               >
                 {label}
               </Link>
@@ -1085,6 +1103,8 @@ export function Nav() {
   );
 }
 ```
+
+> The nav is a **floating pill** (rounded, backdrop-blur), fixed near the top. Over the dark hero it is a faint dark pill with cream text; past ~80vh it becomes a cream pill with ink text. Focus ring must stay visible on both — the global `:focus-visible` maroon outline works on both grounds.
 
 > The nav is now `fixed`. `layout.tsx` renders `<Nav />` then `<main>`; since the hero is full-bleed and starts at the top, the fixed nav overlays it correctly. Do NOT add top padding to `<main>` — the hero intentionally sits under the transparent nav. (Other pages that are NOT the cinematic hero will need their own top spacing in a later spec; out of scope here.)
 
@@ -1150,8 +1170,8 @@ git commit -m "feat: scroll-linked nav + assembled cinematic landing"
 
 ## Self-review notes
 
-Spec coverage: dark hero §4.1 → T1(tokens)+T3+T4; weave-wipe §4.2 → T5; work + project visuals §4.3 → T6/T7/T8; about §4.4 → T9; nav flip + seam §2 → T10; motion foundation §3 → T1/T2; reduced-motion parity → every component task; verification §6 → T11. SplitText re-add §0.5 → T1. Headshot placeholder §4.4 → T9.
+Spec coverage: dark hero §4.1 → T1(tokens)+T4; 3D chrome knot §0.b.6 → T3 (+ three/R3F deps + un-ban); hero portrait §0.b.7 + corner labels §0.b.9 → T4; weave-wipe §4.2 → T5; work + project visuals §4.3 → T6/T7/T8; about §4.4 → T9; pill nav §0.b.8 + flip seam §2 → T10; motion foundation §3 → T1/T2; reduced-motion parity → every component task; verification §6 → T11. SplitText re-add §0.5 → T1. Portrait placeholders → T4 (hero) + T9 (about).
 
 Verification approach: this repo has NO unit-test runner (Biome only) and the deliverables are visual/motion/canvas components. Per Global Constraints, each task's gate is `typecheck` + `build` + `lint` + controller screenshots/DOM checks — not xUnit tests. Do not add a test framework to satisfy TDD form; the honest verification here is compile + visual + state inspection.
 
-Deferred/known: real headshot pending (placeholder ships); hero-field mobile count reduction only if the gut-check flags jank; count-up dropped (YAGNI — landing results are strings, not numeric).
+Deferred/known: real hero portrait + About headshot pending (placeholders ship); chrome knot is desktop-only (hidden `md`), enable on mobile only if the gut-check wants it; count-up dropped (YAGNI — landing results are strings, not numeric). `@react-three/fiber` must resolve for React 19 (v9+) — confirm at install (T3 step 1).

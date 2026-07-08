@@ -19,6 +19,18 @@ Directed by the owner (2026-07-08). These amend the standing "editorial-minimal"
 
 Everything in `Brand_Kit.md` (color/type/voice) and the signature system (dual-type wordmark, interleave weave, ink annotation) still governs — this spec scales them up, it does not replace them.
 
+### 0.b Reference realignment (2026-07-08, after the Majd-portfolio reference)
+
+The owner shared `majd-portfolio.framer.website` (giant type, warm ground, floating chrome 3D objects, pill nav, corner meta-labels, small moody portrait) as the target feel, and made these calls:
+
+6. **3D chrome signature object (React Three Fiber).** A floating glossy **chrome torus-knot** — the interleave-weave rendered as a 3D braided knot (torus-knot p=2,q=3) — is the hero's centerpiece "wow." Slowly rotates, subtly cursor-reactive, maroon-tinted chrome reflections. This **replaces** the 2D hero ambient field (avoids double-canvas clutter/perf). Adds `three`, `@react-three/fiber`, `@react-three/drei` — **amends** `CLAUDE.md`'s "Do not install: three.js". Dynamically imported (`ssr: false`), DPR-capped, reduced-motion → single static render.
+7. **Small moody portrait in the hero** (low/corner, dark b&w editorial) IN ADDITION TO the About portrait. Both are owner-provided; both ship on placeholders.
+8. **Floating pill nav** (rounded, backdrop) replacing the plain bar, still flipping cream↔ink treatment over the dark hero.
+9. **Mono corner meta-labels** in the hero (e.g. `©2026`, `CLINICAL AI · SINCE 2020`) — cheap editorial "designed" texture.
+10. **Giant display type stays Fraunces serif** (NOT a grotesque) — deliberately differentiates from the reference's sans.
+
+The dark hero (decision 3) is retained; the reference's light ground is NOT adopted.
+
 ---
 
 ## 1. Goal & scope
