@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#1d1a15"/>
+  <circle cx="200" cy="170" r="66" fill="#2e2a22"/>
+  <path d="M96 400 C 96 300, 304 300, 304 400 Z" fill="#2e2a22"/>
+  <text x="200" y="380" text-anchor="middle" font-family="monospace" font-size="16" fill="#5a5348">hero-portrait.webp</text>
+</svg>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HeroA } from "@/components/hero/hero-a";
+import { HeroCinematic } from "@/components/hero/hero-cinematic";
 import { Section } from "@/components/section";
 import { WeaveDivider } from "@/components/signature/weave-divider";
 import { WorkRow } from "@/components/work-row";
@@ -8,6 +9,8 @@ import { FEATURED } from "@/content/landing";
 export default function Home() {
   return (
     <>
+      {/* TEMPORARY: mounted first for the Task 4 gut-check; full assembly replaces this in Task 10. */}
+      <HeroCinematic />
       <HeroA />
 
       <WeaveDivider />
