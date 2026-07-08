@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode } from "react";
+import { createElement, type ElementType, type ReactNode } from "react";
 
 type SectionProps = {
   children: ReactNode;
@@ -20,9 +20,9 @@ export function Section({
   as: Tag = "section",
   className = "",
 }: SectionProps) {
-  return (
-    <Tag className={`w-full px-6 py-section-sm md:py-section ${className}`}>
-      <div className={`mx-auto ${widthClass[width]}`}>{children}</div>
-    </Tag>
+  return createElement(
+    Tag,
+    { className: `w-full px-6 py-section-sm md:py-section ${className}` },
+    <div className={`mx-auto ${widthClass[width]}`}>{children}</div>,
   );
 }

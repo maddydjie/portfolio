@@ -44,12 +44,13 @@ Work is first (professional priority). Photography is second (the human hook), n
 - **Fonts:** Fraunces (serif), Inter (sans), JetBrains Mono (mono) — via `next/font/google`
 - **Syntax highlighting:** shiki via rehype-pretty-code
 - **Motion:** GSAP 3.13+ is the motion layer (DrawSVG/ScrollTrigger).
+- **3D:** React Three Fiber (`three`, `@react-three/fiber`, `@react-three/drei`) powers the hero's 3D signature object (chrome torus-knot). Client-only, loaded via `dynamic(..., { ssr: false })`.
 - **Linter/formatter:** Biome (not ESLint + Prettier)
 - **Analytics:** Vercel Analytics
 - **Hosting:** Vercel, auto-deploy from `main`
 - **Package manager:** pnpm
 
-**Do not install:** framer-motion, three.js, sanity, contentful, mongoose, any auth library, any CMS SDK.
+**Do not install:** framer-motion, sanity, contentful, mongoose, any auth library, any CMS SDK.
 
 ## Commands
 
