@@ -35,6 +35,7 @@ export function ChromeKnot({ className = "" }: { className?: string }) {
       camera={{ position: [0, 0, 4.4], fov: 42 }}
       gl={{ antialias: true, alpha: true }}
       className={`pointer-events-none !absolute inset-0 ${className}`}
+      style={{ pointerEvents: "none" }}
     >
       <ambientLight intensity={0.35} />
       <Knot reduce={reduce} />
