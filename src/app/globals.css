@@ -17,6 +17,12 @@
   --color-success: #2d6a4f;
   --color-warning: #9a6a00;
 
+  /* --- dark cinematic hero (section-scoped, NOT a dark-mode toggle) --- */
+  --color-hero-bg: #14120e;
+  --color-hero-fg: #f1eee6;
+  --color-hero-muted: #a39c8e;
+  --color-hero-accent: #d97a6c;
+
   /* --- type families --- */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
@@ -25,6 +31,8 @@
   /* --- type scale (size + line-height), Brand_Kit §4 --- */
   --text-hero-lg: 3.5rem; /* 56 */
   --text-hero-lg--line-height: 1.05;
+  --text-hero-xl: clamp(4rem, 14vw, 12rem);
+  --text-hero-xl--line-height: 0.92;
   --text-hero: 2.5rem; /* 40 */
   --text-hero--line-height: 1.1;
   --text-h2: 2rem; /* 32 */
