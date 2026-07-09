@@ -1,17 +1,17 @@
 import Link from "next/link";
-import { HeroA } from "@/components/hero/hero-a";
-import { HeroCinematic } from "@/components/hero/hero-cinematic";
+import { HeroV2 } from "@/components/hero/hero-v2";
 import { Section } from "@/components/section";
 import { WeaveDivider } from "@/components/signature/weave-divider";
 import { WorkRow } from "@/components/work-row";
 import { FEATURED } from "@/content/landing";
 
-export default function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ v?: string }> }) {
+  const { v } = await searchParams;
+  const variant = v === "b" || v === "c" ? v : "a";
+
   return (
     <>
-      {/* TEMPORARY: mounted first for the Task 4 gut-check; full assembly replaces this in Task 10. */}
-      <HeroCinematic />
-      <HeroA />
+      <HeroV2 variant={variant} />
 
       <WeaveDivider />
 
