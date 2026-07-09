@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ArtDiptych } from "@/components/visual/art-diptych";
-import { ArtMorph } from "@/components/visual/art-morph";
-import { ArtPortrait } from "@/components/visual/art-portrait";
+import { Wordmark } from "@/components/signature/wordmark";
+import { PortraitReveal } from "@/components/visual/portrait-reveal";
 import { AFFILIATIONS } from "@/content/landing";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -11,35 +10,43 @@ import { playOncePerSession, wireSkip } from "@/lib/timeline";
 
 const TAGLINE = "Exploring the future of intelligence, health, and human potential.";
 
-function Art({ v }: { v: "a" | "b" | "c" }) {
-  if (v === "b") return <ArtPortrait />;
-  if (v === "c") return <ArtDiptych />;
-  return <ArtMorph />;
-}
-
-export function HeroV2({ variant = "a" }: { variant?: "a" | "b" | "c" }) {
+export function HeroV2() {
   const root = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = root.current;
     if (!el) return;
     registerGsap();
+    const chars = el.querySelectorAll<HTMLElement>("[data-ch]");
     const lines = el.querySelectorAll<HTMLElement>("[data-line]");
+    const strips = el.querySelectorAll<HTMLElement>("[data-strip]");
+    const scan = el.querySelector<HTMLElement>("[data-scan]");
     const fades = el.querySelectorAll<HTMLElement>("[data-fade]");
 
-    if (prefersReducedMotion() || !playOncePerSession("hero-v2")) {
-      gsap.set([lines, fades], { opacity: 1, y: 0 });
+    if (prefersReducedMotion() || !playOncePerSession("hero-v2b")) {
+      gsap.set([chars, lines, fades], { opacity: 1, y: 0, yPercent: 0 });
+      gsap.set(strips, { scaleY: 0 });
+      if (scan) gsap.set(scan, { opacity: 0 });
       return;
     }
 
     let cleanup = () => {};
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(lines, { opacity: 0, yPercent: 60, stagger: 0.12, duration: 0.7 }).from(
-        fades,
-        { opacity: 0, y: 12, stagger: 0.1, duration: 0.5 },
-        "-=0.2",
-      );
+      tl.from(chars, { opacity: 0, yPercent: 55, stagger: 0.04, duration: 0.5 })
+        .from(lines, { yPercent: 105, stagger: 0.1, duration: 0.6 }, "-=0.1")
+        .from(
+          strips,
+          { scaleY: 1, transformOrigin: "top", stagger: 0.07, duration: 0.5, ease: "power2.inOut" },
+          "-=0.35",
+        )
+        .fromTo(
+          scan,
+          { top: "0%", opacity: 0.9 },
+          { top: "100%", opacity: 0, duration: 0.6, ease: "none" },
+          "<",
+        )
+        .from(fades, { opacity: 0, y: 14, stagger: 0.08, duration: 0.5 }, "-=0.2");
       cleanup = wireSkip(tl);
     }, el);
 
@@ -52,44 +59,42 @@ export function HeroV2({ variant = "a" }: { variant?: "a" | "b" | "c" }) {
   return (
     <section
       ref={root}
-      className="relative flex min-h-[92vh] items-center overflow-hidden bg-hero-bg px-6 text-hero-fg"
+      className="relative flex min-h-[88vh] items-center overflow-hidden bg-hero-bg px-6 text-hero-fg"
     >
-      {/* centerpiece artifact — right half on desktop, faded into the ground on its left edge */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/2 opacity-90 md:block"
-      >
-        <div className="h-full w-full [mask-image:linear-gradient(to_right,transparent,black_38%)]">
-          <Art v={variant} />
+      <div className="mx-auto grid w-full max-w-wide grid-cols-1 items-center gap-10 py-16 md:grid-cols-[1.25fr_1fr] md:gap-16">
+        {/* left — name, subhead, tagline, credentials */}
+        <div>
+          <h1 className="text-[clamp(3.5rem,8vw,8rem)] leading-[0.9]">
+            <Wordmark className="text-[clamp(3.5rem,8vw,8rem)]" />
+          </h1>
+          <p className="mt-6 max-w-[18ch] font-serif text-[clamp(1.5rem,2.7vw,2.5rem)] text-hero-fg/90 italic leading-[1.1]">
+            <span data-line className="block overflow-hidden pb-1">
+              I don&apos;t fit in boxes.
+            </span>
+            <span data-line className="block overflow-hidden pb-1">
+              I build bridges between them.
+            </span>
+          </p>
+          <p data-fade className="mt-8 max-w-reading text-body text-hero-fg/75">
+            {TAGLINE}
+          </p>
+          <p data-fade className="mt-5 font-mono text-hero-muted text-small">
+            MBBS-trained clinician &amp; IIT Madras data scientist
+          </p>
+          <p data-fade className="mt-2 font-mono text-hero-muted text-small">
+            {AFFILIATIONS.join("  ·  ")}
+          </p>
+        </div>
+
+        {/* right — portrait reveal (the signature moment) */}
+        <div className="mx-auto w-full max-w-sm md:mx-0">
+          <PortraitReveal />
         </div>
       </div>
 
-      <div className="relative mx-auto w-full max-w-wide">
-        <h1 className="max-w-[15ch] font-serif text-[clamp(2.5rem,6vw,5.25rem)] italic leading-[1.03] tracking-tight">
-          <span data-line className="block overflow-hidden pb-1">
-            I don&apos;t fit in boxes.
-          </span>
-          <span data-line className="block overflow-hidden pb-1">
-            I build bridges between them.
-          </span>
-        </h1>
-        <p data-fade className="mt-8 max-w-reading text-body text-hero-fg/85">
-          {TAGLINE}
-        </p>
-        <p data-fade className="mt-6 font-mono text-hero-muted text-small">
-          MBBS-trained clinician &amp; IIT Madras data scientist
-        </p>
-        <p data-fade className="mt-2 font-mono text-hero-muted text-small">
-          {AFFILIATIONS.join("  ·  ")}
-        </p>
-        <p data-fade className="mt-14 font-mono text-hero-muted text-small tracking-widest">
-          scroll ↓
-        </p>
-      </div>
-
       <span className="absolute bottom-6 left-6 font-mono text-hero-muted text-small">©2026</span>
-      <span className="absolute right-6 bottom-6 font-mono text-hero-muted text-small tracking-wide">
-        MBBS · IIT MADRAS
+      <span className="absolute right-6 bottom-6 font-mono text-hero-muted text-small tracking-widest">
+        scroll ↓
       </span>
     </section>
   );

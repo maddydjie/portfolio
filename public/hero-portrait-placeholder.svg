@@ -1,6 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
-  <rect width="400" height="400" fill="#1d1a15"/>
-  <circle cx="200" cy="170" r="66" fill="#2e2a22"/>
-  <path d="M96 400 C 96 300, 304 300, 304 400 Z" fill="#2e2a22"/>
-  <text x="200" y="380" text-anchor="middle" font-family="monospace" font-size="16" fill="#5a5348">hero-portrait.webp</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="600" viewBox="0 0 480 600">
+  <rect width="480" height="600" fill="#181510"/>
+  <g stroke="#3a2320" stroke-width="1" fill="none" opacity="0.7">
+    <path d="M240 150 C 300 150, 320 210, 315 262 C 312 302, 298 332, 240 342 C 182 332, 168 302, 165 262 C 160 210, 180 150, 240 150 Z"/>
+    <path d="M150 600 C 150 468, 330 468, 330 600"/>
+    <line x1="240" y1="120" x2="240" y2="468" opacity="0.4"/>
+    <line x1="120" y1="248" x2="360" y2="248" opacity="0.4"/>
+  </g>
+  <g fill="#4a2c28">
+    <circle cx="210" cy="252" r="3"/>
+    <circle cx="270" cy="252" r="3"/>
+  </g>
+  <text x="28" y="562" font-family="monospace" font-size="15" letter-spacing="2" fill="#6a5f4e">PORTRAIT · AWAITING FEED</text>
 </svg>
