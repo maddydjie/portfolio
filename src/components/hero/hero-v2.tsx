@@ -17,53 +17,71 @@ export function HeroV2() {
     const el = root.current;
     if (!el) return;
     registerGsap();
+
     const chars = el.querySelectorAll<HTMLElement>("[data-ch]");
     const lines = el.querySelectorAll<HTMLElement>("[data-line]");
+    const fades = el.querySelectorAll<HTMLElement>("[data-fade]");
+    const left = el.querySelector<HTMLElement>("[data-hero-left]");
     const strips = el.querySelectorAll<HTMLElement>("[data-strip]");
     const scan = el.querySelector<HTMLElement>("[data-scan]");
-    const fades = el.querySelectorAll<HTMLElement>("[data-fade]");
+    const photo = el.querySelector<HTMLElement>("[data-photo]");
 
-    if (prefersReducedMotion() || !playOncePerSession("hero-v2b")) {
-      gsap.set([chars, lines, fades], { opacity: 1, y: 0, yPercent: 0 });
+    const reduce = prefersReducedMotion();
+
+    // portrait resting state
+    if (reduce) {
       gsap.set(strips, { scaleY: 0 });
+      gsap.set(photo, { opacity: 1 });
       if (scan) gsap.set(scan, { opacity: 0 });
-      return;
     }
 
-    let cleanup = () => {};
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(chars, { opacity: 0, yPercent: 55, stagger: 0.04, duration: 0.5 })
-        .from(lines, { yPercent: 105, stagger: 0.1, duration: 0.6 }, "-=0.1")
-        .from(
-          strips,
-          { scaleY: 1, transformOrigin: "top", stagger: 0.07, duration: 0.5, ease: "power2.inOut" },
-          "-=0.35",
-        )
-        .fromTo(
-          scan,
-          { top: "0%", opacity: 0.9 },
-          { top: "100%", opacity: 0, duration: 0.6, ease: "none" },
-          "<",
-        )
-        .from(fades, { opacity: 0, y: 14, stagger: 0.08, duration: 0.5 }, "-=0.2");
-      cleanup = wireSkip(tl);
-    }, el);
+    // intro reveal (text) — once per session, skippable
+    let cleanupSkip = () => {};
+    let ictx: gsap.Context | null = null;
+    if (!reduce && playOncePerSession("hero-intro")) {
+      ictx = gsap.context(() => {
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        tl.from(chars, { opacity: 0, yPercent: 55, stagger: 0.04, duration: 0.5 })
+          .from(lines, { yPercent: 105, stagger: 0.1, duration: 0.6 }, "-=0.1")
+          .from(fades, { opacity: 0, y: 14, stagger: 0.08, duration: 0.5 }, "-=0.15");
+        cleanupSkip = wireSkip(tl);
+      }, el);
+    } else if (!reduce) {
+      gsap.set([chars, lines, fades], { opacity: 1, y: 0, yPercent: 0 });
+    }
+
+    // scroll-driven scan reveal + parallax (pinned)
+    let sctx: gsap.Context | null = null;
+    if (!reduce) {
+      gsap.set(strips, { scaleY: 1 }); // cover the portrait until scrolled
+      gsap.set(photo, { opacity: 0.18 });
+      sctx = gsap.context(() => {
+        const stl = gsap.timeline({
+          scrollTrigger: { trigger: el, start: "top top", end: "+=90%", scrub: 0.6, pin: true },
+        });
+        stl
+          .to(strips, { scaleY: 0, transformOrigin: "top", stagger: 0.05, ease: "none" }, 0)
+          .fromTo(scan, { top: "0%", opacity: 1 }, { top: "100%", opacity: 0, ease: "none" }, 0)
+          .to(photo, { opacity: 1, ease: "none" }, 0)
+          .to(left, { yPercent: -14, opacity: 0.25, ease: "none" }, 0);
+      }, el);
+    }
 
     return () => {
-      cleanup();
-      ctx.revert();
+      cleanupSkip();
+      ictx?.revert();
+      sctx?.revert();
     };
   }, []);
 
   return (
     <section
       ref={root}
-      className="relative flex min-h-[88vh] items-center overflow-hidden bg-hero-bg px-6 text-hero-fg"
+      className="relative flex min-h-screen items-center overflow-hidden bg-hero-bg px-6 text-hero-fg"
     >
       <div className="mx-auto grid w-full max-w-wide grid-cols-1 items-center gap-10 py-16 md:grid-cols-[1.25fr_1fr] md:gap-16">
         {/* left — name, subhead, tagline, credentials */}
-        <div>
+        <div data-hero-left>
           <h1 className="text-[clamp(3.5rem,8vw,8rem)] leading-[0.9]">
             <Wordmark className="text-[clamp(3.5rem,8vw,8rem)]" />
           </h1>
@@ -86,7 +104,7 @@ export function HeroV2() {
           </p>
         </div>
 
-        {/* right — portrait reveal (the signature moment) */}
+        {/* right — scroll-revealed portrait (the signature moment) */}
         <div className="mx-auto w-full max-w-sm md:mx-0">
           <PortraitReveal />
         </div>
