@@ -2,7 +2,7 @@
 
 Date: 2026-07-13
 Owner: BVS Madhavi (site owner)
-Status: Approved (lab → promote)
+Status: Approved (lab compare → pick → promote)
 
 ## Goal
 
@@ -17,14 +17,15 @@ Hero (COMBINED rise-and-dock — unchanged)
 WeaveDivider
 EXPERIENCE
 ACHIEVEMENTS
-SELECTED WORK (project bento)
+SELECTED WORK (layout TBD — lab compare, see below)
 Photography one-liner
 ```
 
 Story PATH bridge stays out of production (lab may remain unused).
 
-Build first on `/lab/work` (or `/lab/experience` if cleaner), then promote onto
-`/` once owner signs off visually.
+**Lab-first:** `/lab/work` hosts shared Experience + Achievements, then a toggle
+across **three project layouts**. Owner picks by eye; only the winner promotes
+to `/`.
 
 ## Experience
 
@@ -69,30 +70,59 @@ Own section between Experience and Projects.
 
 Tone: understated, specific, peer-reviewed facts. No hustle-speak.
 
-## Selected Work (projects)
+## Selected Work (projects) — lab compare (owner pick)
 
-Show the full featured set in a Magic Bento + TiltedCard grid. TargetCursor
-scoped to this section only (`pointer:fine` + reduced-motion off).
+Same six projects and headline in every variant. Toggle on `/lab/work`:
+
+`1 · Masthead` | `2 · Diptych` | `3 · Bento`
+
+Headline (all): **Systems that reach the bedside.**  
+Footer (all): All work ↗ → `/work`
 
 | Project | Source | Notes |
 |---|---|---|
-| CaseConnect | GitHub `case-connect` | Large cell — systems |
-| MedNavigator | GitHub `med_navigator` | Large cell — clinical RAG |
+| CaseConnect | GitHub `case-connect` | Systems |
+| MedNavigator | GitHub `med_navigator` | Clinical RAG |
 | MedGemma NeuroAssist | Resume / hackathon | Imaging fine-tune |
 | KAVACH | GitHub `KAVACH-DEEPMIND-V2` | Verify README on build |
 | Analog Hour | GitHub `analog-hr` | Digital wellbeing |
-| watch2compete | GitHub `watch2compete` | CompeteWatch / competitive intel |
+| watch2compete | GitHub `watch2compete` | CompeteWatch |
 
-Headline: **Systems that reach the bedside.**  
-Footer link: All work ↗ → `/work` (can remain thin until a later pass).
+### Variant 1 — Masthead + compact list
 
-Optional later (not required in this pass): Pneumonia CXR, Cheiloscopy, Space
-BioMed as mono chips under the grid.
+- CaseConnect as full-width editorial masthead (title, one proof line, short
+  summary, repo link); subtle tilt or BlurText only.
+- Remaining five as compact mono rows: title · meta · one-line proof; hover
+  expands summary / link.
+- Best for recruiter skim after a dense Experience block.
+
+### Variant 2 — Clinical ↔ technical diptychs
+
+Three paired rows (md+):
+
+| Clinical-leaning | Technical-leaning |
+|---|---|
+| CaseConnect | MedNavigator |
+| MedGemma NeuroAssist | KAVACH |
+| Analog Hour | watch2compete |
+
+- Hairline / weave between columns; scroll stagger left then right.
+- Mobile: chronological single stack (CaseConnect → … → watch2compete).
+- Best brand-thesis fit (duality as structure).
+
+### Variant 3 — Magic Bento + tilt
+
+- Existing lab pattern: BentoGrid + TiltedCard + TargetCursor (section-scoped).
+- Mixed cell sizes: CaseConnect + MedNavigator large; others smaller.
+- Best “playful / eye-catchy grid” option.
 
 ### Description duty
 
 On implement: read live READMEs for `watch2compete`, `analog-hr`, and
 `KAVACH-DEEPMIND-V2` before finalizing card copy. Do not invent.
+
+Optional later (not required): Pneumonia CXR, Cheiloscopy, Space BioMed as
+mono chips under the chosen grid.
 
 ## Motion / flow
 
@@ -104,14 +134,17 @@ Purposeful density — orchestrated, not every ReactBits effect at once.
 | Experience lead + rows | Scroll stagger fade/rise |
 | AMC card | Optional ECG hairline draw once |
 | Achievements | ScrollReveal or BlurText on titles; card stagger |
-| Projects | TiltedCard + Magic Bento maroon glow + TargetCursor |
+| Projects (Masthead) | Masthead BlurText; rows fade on hover/scroll |
+| Projects (Diptych) | Left/right stagger; weave hairline |
+| Projects (Bento) | TiltedCard + Magic Bento maroon glow + TargetCursor |
 | Seams | WeaveDivider / GradualBlur between major blocks |
 
 Constraints:
 - GSAP only; existing primitives under `src/components/text/` and
   `src/components/work/`. No framer-motion. No new deps without asking.
 - `prefers-reduced-motion` → static resting layouts.
-- Cursor follower only inside the projects grid (Brand_Kit / CLAUDE.md).
+- TargetCursor **only** in Bento variant, scoped to the projects grid
+  (`pointer:fine` + reduced-motion off).
 
 ## Visual system
 
@@ -121,8 +154,8 @@ Brand_Kit tokens only:
 - Signature: dual-type interleave + maroon accent seasoning + optional ECG on AMC
 
 **Aesthetic risk (one):** Experience lead card is editorial and large (role as
-masthead), projects are interactive bento — contrast between “employed proof”
-and “shipped proof.” Do not flatten both into the same card chrome.
+masthead). Project layout is chosen from lab compare — winner must still
+contrast with Experience (not the same card chrome repeated).
 
 Avoid: purple glow, cream+terracotta template drift, dense broadsheet columns,
 stat-strip dashboard clutter in the first Work viewport after hero.
@@ -144,16 +177,19 @@ stat-strip dashboard clutter in the first Work viewport after hero.
 
 ## Success criteria
 
+- Lab `/lab/work` shows Experience + Achievements + toggle across three project
+  layouts (Masthead, Diptych, Bento) with identical project set
+- Owner picks one layout; only that layout promotes to `/`
 - Landing (after promote) reads Experience → Achievements → Projects
 - No AstraZeneca / sponsor strings in UI copy
 - All six projects render with real repo links where public
-- Motion respects reduced-motion; TargetCursor only on projects
+- Motion respects reduced-motion; TargetCursor only on Bento variant
 - `tsc --noEmit` + production build pass
-- Owner preview in lab before `/` swap
 
 ## Testing
 
-- `/lab/work` (or dedicated lab route): desktop + mobile screenshots
+- `/lab/work`: toggle all three; desktop + mobile screenshots
 - Grep UI strings for `AstraZeneca` / `Astra` — must be zero
 - Verify each project link 200s or intentional no-link (MedGemma)
 - Reduced-motion smoke
+- Diptych mobile collapse = single chronological stack
