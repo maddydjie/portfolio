@@ -67,3 +67,12 @@ export const EXPERIENCE_ROLES: ExperienceRole[] = [
       "Healthcare-domain operations: sourced 100+ qualified leads and tightened lead-management workflow across US/UK healthcare commercial channels.",
   },
 ];
+
+/** Reverse-chron journey beats for sticky / spine / hybrid layouts. */
+export const EXPERIENCE_JOURNEY: ExperienceRole[] = [
+  EXPERIENCE_ROLES[0], // nference FT
+  EXPERIENCE_ROLES[1], // nference intern
+  EXPERIENCE_ROLES[2], // AMC
+  EXPERIENCE_ROLES[3], // DEXTER
+  EXPERIENCE_ROLES[4], // Animations
+];
