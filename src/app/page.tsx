@@ -1,42 +1,50 @@
 import Link from "next/link";
-import { HeroV2 } from "@/components/hero/hero-v2";
+import { ContactBoard } from "@/components/contact/contact-board";
+import { HeroCombined } from "@/components/hero/hero-combined";
 import { Section } from "@/components/section";
 import { WeaveDivider } from "@/components/signature/weave-divider";
-import { WorkRow } from "@/components/work-row";
-import { FEATURED } from "@/content/landing";
+import { ExperienceSpineStack } from "@/components/work/experience-journey";
+import { HonorsStrip } from "@/components/work/honors-strip";
+import { ProjectsBento } from "@/components/work/projects-bento";
+import { ResearchSection } from "@/components/work/research-section";
 
 export default function Home() {
   return (
     <>
-      <HeroV2 />
+      <HeroCombined />
 
       <WeaveDivider />
 
-      <Section width="wide" as="div">
-        <h2 id="work" className="text-h2">
-          Selected work
-        </h2>
-        <div className="mt-8">
-          {FEATURED.map((p) => (
-            <WorkRow key={p.title} project={p} />
-          ))}
-        </div>
-        <p className="mt-8 text-small">
-          <Link href="/work" className="text-accent underline-offset-4 hover:underline">
-            All work ↗
-          </Link>
-        </p>
-      </Section>
+      <ExperienceSpineStack />
 
-      <Section width="reading" as="div" className="pt-0">
+      <WeaveDivider />
+
+      <ResearchSection />
+
+      <WeaveDivider />
+
+      <HonorsStrip />
+
+      <WeaveDivider />
+
+      <ProjectsBento />
+
+      <Section width="reading" as="div" className="pt-0 pb-20 md:pb-24">
         <p className="text-small text-muted-foreground">
           I also{" "}
-          <Link href="/photography" className="text-accent underline-offset-4 hover:underline">
+          <Link
+            href="/photography"
+            className="text-accent underline-offset-4 hover:underline"
+          >
             shoot photography
           </Link>
           .
         </p>
       </Section>
+
+      <WeaveDivider />
+
+      <ContactBoard headingLevel="h2" />
     </>
   );
 }

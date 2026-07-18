@@ -30,7 +30,11 @@ export function AchievementsSection() {
   }, []);
 
   return (
-    <section ref={rootRef} className="bg-background px-6 py-20 text-foreground md:py-24">
+    <section
+      ref={rootRef}
+      className="bg-background px-6 py-16 text-foreground md:py-20"
+      aria-label="Achievements"
+    >
       <div className="mx-auto max-w-wide">
         <p className="mb-3 font-mono text-muted-foreground text-small tracking-[0.2em]">
           ACHIEVEMENTS

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Wordmark } from "@/components/signature/wordmark";
 
 const items = [
-  ["Work", "/work"],
+  ["Work", "/#work"],
   ["Photography", "/photography"],
   ["Writing", "/writing"],
   ["About", "/about"],

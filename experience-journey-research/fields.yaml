@@ -1,0 +1,42 @@
+# Fields for experience-journey UX research.
+# Steal patterns for a resume Experience block: scroll journey, pin/sticky,
+# timeline, cards — GSAP, editorial-minimal, maroon #8B2E2A, reduced-motion.
+
+categories:
+
+  pattern:
+    - name: pattern_name
+      description: Short name of the experience/career presentation pattern.
+      detail_level: brief
+    - name: how_it_works
+      description: Concrete interaction model — pin, sticky rail, horizontal scrub, step cards, vertical timeline, etc. Include scroll distances and what moves vs stays.
+      detail_level: detailed
+    - name: visual_structure
+      description: Layout of a single beat (date, role, org, bullets, proof chip) and how beats stack or morph on scroll.
+      detail_level: detailed
+
+  motion:
+    - name: motion_recipe
+      description: Specific GSAP/CSS motion — scrub vs once, stagger, pin end percentages, easing. What NOT to animate.
+      detail_level: detailed
+    - name: reduced_motion
+      description: Static fallback that still communicates the career path without pin/scrub.
+      detail_level: moderate
+
+  fit_for_madhavi:
+    - name: brand_fit
+      description: Fit for clinical-AI portfolio (editorial-minimal, Fraunces/Inter, maroon, no purple SaaS, no scroll-jack abuse). Score HIGH / MEDIUM / LOW with reason.
+      detail_level: detailed
+    - name: steal
+      description: One concrete thing to steal for the Experience section.
+      detail_level: detailed
+    - name: avoid
+      description: One concrete thing to avoid (slop, a11y, recruiter friction).
+      detail_level: detailed
+
+  reference:
+    - name: live_examples
+      description: 1–3 live URLs or named sites that exemplify this pattern (or [uncertain] if none verified).
+      detail_level: moderate
+
+uncertain: []

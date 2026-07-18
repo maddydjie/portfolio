@@ -14,4 +14,4 @@ export function registerGsap(): void {
   registered = true;
 }
 
-export { gsap };
+export { gsap, ScrollTrigger };

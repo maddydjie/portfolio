@@ -1,0 +1,68 @@
+topic: >-
+  Scroll-driven EXPERIENCE / career-journey presentation patterns for a
+  clinical-AI-engineer portfolio. Goal: replace a flat resume card stack with a
+  flowy, eye-catching journey that still scans for recruiters. Stack constraint:
+  GSAP ScrollTrigger (pin/scrub OK if restrained), Brand_Kit maroon #8B2E2A on
+  paper #FAF9F6, Fraunces/Inter, prefers-reduced-motion mandatory. No
+  framer-motion. No purple SaaS glow. Content beats: nference FT → nference
+  intern → AMC clinical intern → DEXTER ML intern → Animations Media ops.
+
+items:
+
+  - name: Sticky left rail experience
+    category: layout
+    description: >-
+      Brittany Chiang–style sticky left panel (section label + active year/role)
+      while right column scrolls experience entries. Evaluate for Madhavi landing
+      after a dark hero into light paper Work area.
+
+  - name: Pinned scroll journey scrub
+    category: scroll-pin
+    description: >-
+      One pinned viewport; scroll scrubs through career beats (role title morphs,
+      org changes, bullets fade). Similar to rise-and-dock hero energy but for
+      experience. Judge recruiter friction vs delight; max pin length.
+
+  - name: Vertical spine timeline
+    category: timeline
+    description: >-
+      Classic vertical timeline with maroon spine/hairline, date nodes, ECG or
+      weave accents at clinical beats (AMC). Scroll-reveal per node. Karpathy-
+      style institution credibility without looking like LinkedIn.
+
+  - name: Spotify-wrapped style journey cards
+    category: cards
+    description: >-
+      Inspired by Paxel / Spotify Wrapped card stacks — each role is a full-bleed
+      or large interactive card that advances on scroll or click. Fun narrative
+      beats. Check if too consumer-playful for clinical credibility.
+
+  - name: Horizontal filmstrip scrub
+    category: scroll-horizontal
+    description: >-
+      Horizontal scroll/scrub of role "chapters" after Experience heading.
+      Desktop wow; mobile fallback to vertical. A11y and scroll-hijack risks.
+
+  - name: Stepper chapter with progress
+    category: stepper
+    description: >-
+      Numbered journey 01–05 with a progress indicator; each chapter expands
+      in place (accordion or scroll-linked height). Quiet editorial, high scan.
+
+  - name: Dual path clinical technical rails
+    category: brand-thesis
+    description: >-
+      Experience mapped onto Clinical vs Technical rails over time (AMC left,
+      DEXTER/nference technical right) with a merging weave — brand thesis as
+      career structure. Overlap dates (AMC + nference intern) must stay clear.
+
+  - name: Obys editorial type takeover
+    category: editorial-motion
+    description: >-
+      Oversized role titles that scrub/scale on scroll with sparse body copy —
+      agency editorial. Calibrate how much is too much for a hiring manager.
+
+execution:
+  batch_size: 4
+  items_per_agent: 1
+  output_dir: ./experience-journey-research/results
