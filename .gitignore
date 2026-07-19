@@ -44,3 +44,20 @@ next-env.d.ts
 .playwright-mcp/
 *-check-*.png
 wordmark-*.png
+
+# local lab media (do not ship)
+*.mov
+/A-pixel.png
+/A2-pixel-mid.png
+/A3-pixel-coarse.png
+/B-tilt.png
+/C-spotlight.png
+/C2-spotlight.png
+/D-diptych.png
+/G-gallery.png
+/P-profilecard.png
+/S0.png
+/S1.png
+/S2.png
+/S2b.png
+
