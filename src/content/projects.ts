@@ -78,7 +78,7 @@ export const PROJECTS: ProjectCard[] = [
   },
 ];
 
-export const PROJECTS_HEADLINE = "Systems that reach the bedside.";
+export const PROJECTS_HEADLINE = "Projects I shipped.";
 
 /** Diptych pairs: clinical-leaning | technical-leaning */
 export const PROJECT_DIPTYCHS: [ProjectCard, ProjectCard][] = [

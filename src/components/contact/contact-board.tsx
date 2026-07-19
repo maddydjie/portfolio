@@ -7,7 +7,7 @@ import { CONTACT } from "@/content/contact";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 
-const PARTICLE_WORDS = ["SIGNAL", "BEDSIDE", "SHIP"] as const;
+const PARTICLE_WORDS = ["CLINICIAN", "SIGNAL", "TRUST", "SHIP"] as const;
 
 export function ContactBoard({
   headingLevel = "h1",
@@ -61,9 +61,9 @@ export function ContactBoard({
 
   return (
     <div ref={rootRef}>
-      {/* Kinetic word showpiece */}
+      {/* Kinetic word showpiece — animation owns the viewport */}
       <section className="bg-hero-bg text-hero-fg">
-        <div className="mx-auto max-w-wide px-6 pt-14 pb-6 md:pt-20 md:pb-8">
+        <div className="mx-auto max-w-wide px-6 pt-12 md:pt-16">
           <div data-in className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="font-mono text-hero-muted text-small tracking-[0.2em]">SIGNAL</p>
@@ -81,10 +81,12 @@ export function ContactBoard({
           </div>
         </div>
 
-        <ParticleField
-          words={PARTICLE_WORDS}
-          className="h-[clamp(14rem,40vh,22rem)] w-full md:h-[clamp(16rem,46vh,26rem)]"
-        />
+        <div className="mt-6 border-hero-accent/40 border-y md:mt-8">
+          <ParticleField
+            words={PARTICLE_WORDS}
+            className="h-[clamp(18rem,58vh,34rem)] w-full md:h-[clamp(22rem,64vh,40rem)]"
+          />
+        </div>
       </section>
 
       {/* Proper contact — paper contrast so channels stay scannable */}

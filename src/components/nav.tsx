@@ -3,7 +3,6 @@ import { Wordmark } from "@/components/signature/wordmark";
 
 const items = [
   ["Work", "/#work"],
-  ["Photography", "/photography"],
   ["Writing", "/writing"],
   ["About", "/about"],
   ["Contact", "/contact"],

@@ -38,13 +38,13 @@ function sampleGlyph(w: number, h: number, text: string, step: number): Array<[n
   ctx.clearRect(0, 0, w, h);
 
   const chars = [...text];
-  // Fill the band: tall glyphs, still capped so long words don't clip.
-  let size = Math.min(h * 0.72, w * 0.2);
+  // Own the band: prioritize height so words read huge, then fit to width.
+  let size = h * 0.88;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  // Generous corridor between letters so glyphs never fuse into one blob.
-  const gapFor = (s: number) => Math.max(step * 2.5, s * 0.22);
+  // Tighter corridors on long words so they can still fill the height.
+  const gapFor = (s: number) => Math.max(step * 1.8, s * (chars.length > 5 ? 0.12 : 0.2));
   const measure = (s: number) => {
     ctx.font = `900 ${s}px ${FAMILY}`;
     let total = 0;
@@ -54,8 +54,8 @@ function sampleGlyph(w: number, h: number, text: string, step: number): Array<[n
   };
 
   let total = measure(size);
-  if (total > w * 0.94 && total > 1) {
-    size *= (w * 0.94) / total;
+  if (total > w * 0.96 && total > 1) {
+    size *= (w * 0.96) / total;
     total = measure(size);
   }
 
@@ -124,8 +124,8 @@ export function ParticleField({
     const accent = "#c45c4e";
 
     // Cursor repulsion.
-    const repelR = 110;
-    const repelForce = 5.6;
+    const repelR = 140;
+    const repelForce = 6.2;
     // Spring back to home.
     const spring = 0.045;
     const damping = 0.86;
@@ -190,7 +190,8 @@ export function ParticleField({
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      step = Math.max(6, Math.round(Math.min(w, h) / 36));
+      // Denser lattice on large canvases so big glyphs stay crisp.
+      step = Math.max(5, Math.round(Math.min(w, h) / 48));
       const first = words[wordIndex] ?? words[0];
       if (first) applyWord(first, true);
     };
@@ -231,7 +232,7 @@ export function ParticleField({
       }
     };
 
-    const dotR = () => Math.max(1.15, step * 0.16);
+    const dotR = () => Math.max(1.25, step * 0.18);
 
     const render = (t: number) => {
       ctx.fillStyle = ink;
