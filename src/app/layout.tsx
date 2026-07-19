@@ -7,7 +7,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "BVS Madhavi — Clinical AI Engineer",
   description:
-    "MBBS-trained clinician and IIT Madras data scientist building at the intersection of clinical AI, real-world evidence, and multimodal health.",
+    "Clinician and IIT Madras data scientist who ran MBBS and a BS in Data Science in parallel. Building clinical AI that has to work at the bedside.",
 };
 
 export default function RootLayout({

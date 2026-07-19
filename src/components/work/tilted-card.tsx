@@ -61,7 +61,7 @@ export function TiltedCard({
     <div
       ref={wrapRef}
       style={{ perspective: "900px" }}
-      className={`h-full ${className}`.trim()}
+      className={className || "h-full"}
     >
       <div
         ref={cardRef}

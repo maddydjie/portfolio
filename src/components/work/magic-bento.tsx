@@ -13,6 +13,7 @@ const CSS = `
 .mb-cell{ position:relative; overflow:hidden; border-radius:1rem; border:1px solid var(--color-border);
   background:var(--color-surface); transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
   --gx:50%; --gy:50%; --gi:0; }
+.mb-cell.mb-sharp{ border-radius:0.25rem; }
 .mb-cell:hover{ transform:translateY(-3px); box-shadow:0 14px 34px -18px rgba(139,46,42,.4);
   border-color:color-mix(in srgb, var(--color-accent) 45%, var(--color-border)); }
 .mb-glow{ position:absolute; inset:0; pointer-events:none; border-radius:inherit;

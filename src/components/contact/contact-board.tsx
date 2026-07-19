@@ -174,10 +174,11 @@ export function ContactBoard({
               <ul className="mt-6 divide-y divide-border border-y border-border">
                 {(
                   [
+                    ["Education", "/#education"],
                     ["Experience", "/#work"],
                     ["Research", "/#research"],
-                    ["Selected work", "/#selected-work"],
                     ["Honors", "/#honors"],
+                    ["Selected work", "/#selected-work"],
                   ] as const
                 ).map(([label, href]) => (
                   <li key={href}>

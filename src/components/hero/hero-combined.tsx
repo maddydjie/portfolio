@@ -9,13 +9,7 @@ import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 import { ProfileCard } from "./profile-card";
 
-const ROLES = [
-  "Medicine",
-  "Data Scientist",
-  "Space Researcher",
-  "Clinical AI",
-  "Photographer",
-];
+const ROLES = ["Medicine", "Data Scientist", "Space Researcher", "Clinical AI", "Photographer"];
 
 // RISE & DOCK — scroll-scored hero. On load "Dr Madhavi" sits centred; on scroll
 // the wordmark docks left while ProfileCard slides in from the right and copy
@@ -134,9 +128,10 @@ export function HeroCombined() {
             >
               I don&apos;t fit in boxes. I build bridges between them.
             </p>
-            <p data-copy className="mt-6 max-w-[46ch] text-body text-hero-fg/72">
-              Trained at the bedside, then at IIT Madras. I turn the mess of real
-              clinical care into models people can actually trust — and ship them.
+            <p data-copy className="mt-6 max-w-[48ch] text-body text-hero-fg/72">
+              I ran MBBS at Andhra Medical College and the IIT Madras BS in Data Science at the same
+              time. Wards on one rail, models on the other. Now I ship clinical AI that has to work
+              at the bedside.
             </p>
 
             <div data-copy className="mt-7 flex items-center gap-3">
@@ -162,7 +157,10 @@ export function HeroCombined() {
             </p>
           </div>
 
-          <div data-portrait className="justify-self-center will-change-transform md:justify-self-end">
+          <div
+            data-portrait
+            className="justify-self-center will-change-transform md:justify-self-end"
+          >
             <ProfileCard
               name="Dr Madhavi"
               title="Clinician · Data Scientist"
@@ -209,7 +207,5 @@ function DecryptingRoles({
     return () => clearInterval(id);
   }, [words, intervalMs]);
 
-  return (
-    <DecryptedText text={words[i] ?? words[0]} className={className} replayKey={i} />
-  );
+  return <DecryptedText text={words[i] ?? words[0]} className={className} replayKey={i} />;
 }

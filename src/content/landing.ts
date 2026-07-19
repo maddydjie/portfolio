@@ -8,7 +8,7 @@ export type ProjectRow = {
 };
 
 export const POSITIONING =
-  "MBBS-trained clinician and IIT Madras data scientist building at the intersection of clinical AI, real-world evidence, and multimodal health.";
+  "Clinician and IIT Madras data scientist who ran MBBS and a BS in Data Science in parallel. Building clinical AI, real-world evidence, and multimodal health systems that have to work at the bedside.";
 
 export const AFFILIATIONS = ["nference", "IIT Madras", "Andhra Medical College", "IAF"];
 

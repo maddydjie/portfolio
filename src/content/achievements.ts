@@ -39,7 +39,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     title: "Harvard HPAIR delegate",
     meta: "2025 · 2026",
     points: [
-      "Selected as Harvard HPAIR delegate (Tokyo) for 2025 and 2026.",
+      "Invited twice as Harvard HPAIR delegate (Tokyo) for 2025 and 2026.",
     ],
   },
 ];
