@@ -4,6 +4,7 @@ import { WeaveDivider } from "@/components/signature/weave-divider";
 import { EducationStrip } from "@/components/work/education-strip";
 import { ExperienceSpineStack } from "@/components/work/experience-journey";
 import { HonorsStrip } from "@/components/work/honors-strip";
+import { PressClipping } from "@/components/work/press-clipping";
 import { ProjectsBento } from "@/components/work/projects-bento";
 import { ResearchSection } from "@/components/work/research-section";
 
@@ -24,7 +25,7 @@ export default function Home() {
 
       <ResearchSection />
 
-      <WeaveDivider />
+      <PressClipping />
 
       <HonorsStrip />
 

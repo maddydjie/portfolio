@@ -5,13 +5,15 @@ import { useLayoutEffect, useRef } from "react";
 import { BlurText } from "@/components/text/blur-text";
 import { DecryptedText } from "@/components/text/decrypted-text";
 import { BentoCell } from "@/components/work/magic-bento";
-import { HONORS } from "@/content/honors";
+import { type Honor, HONORS } from "@/content/honors";
 import { gsap, registerGsap, ScrollTrigger } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 
+const GRID = HONORS.filter((h) => !h.featured);
+
 /**
- * Honors — Magic Bento cells (maroon spotlight + particles) with BlurText /
- * DecryptedText entrance. Underlines draw after cells settle.
+ * Honors grid — HPAIR / DeepMind / IITM.
+ * Press lives in PressClipping (dark band) above this section.
  */
 export function HonorsStrip() {
   const rootRef = useRef<HTMLElement>(null);
@@ -56,7 +58,7 @@ export function HonorsStrip() {
           opacity: 1,
           y: 0,
           duration: 0.65,
-          stagger: 0.14,
+          stagger: 0.12,
         },
         0.22,
       );
@@ -65,7 +67,7 @@ export function HonorsStrip() {
         {
           scaleX: 1,
           duration: 0.55,
-          stagger: 0.12,
+          stagger: 0.1,
           ease: "power2.inOut",
         },
         0.55,
@@ -110,63 +112,67 @@ export function HonorsStrip() {
         </header>
 
         <ul className="grid gap-3 md:grid-cols-3 md:gap-4">
-          {HONORS.map((h) => {
-            const inner = (
-              <div className="flex h-full flex-col p-6 md:p-7">
-                <div className="flex h-14 w-14 items-center justify-center rounded-sm border border-border bg-background/80 p-2">
-                  <Image
-                    src={h.logo.src}
-                    alt={h.logo.alt}
-                    width={56}
-                    height={56}
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-
-                <p className="relative mt-6 inline-block w-fit pb-2">
-                  <span className="font-serif text-[clamp(1.75rem,3.6vw,2.5rem)] text-accent leading-[0.95] tracking-[-0.02em]">
-                    {h.highlight}
-                  </span>
-                  <span
-                    data-underline
-                    aria-hidden="true"
-                    className="absolute bottom-0 left-0 h-[3px] w-full origin-left scale-x-0 bg-accent"
-                  />
-                </p>
-
-                <div className="mt-auto border-border border-t pt-5">
-                  <h3 className="font-serif text-h3 leading-tight">{h.org}</h3>
-                  <p className="mt-2 font-mono text-muted-foreground text-small">
-                    <DecryptedText text={h.role} startOnView />
-                  </p>
-                  {h.meta ? (
-                    <p className="mt-1 font-mono text-muted-foreground text-small">{h.meta}</p>
-                  ) : null}
-                </div>
-              </div>
-            );
-
-            return (
-              <li key={h.id} data-honor-cell className="min-h-[280px]">
-                <BentoCell className="mb-sharp h-full min-h-[280px]" particles={10}>
-                  {h.href ? (
-                    <a
-                      href={h.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-                    >
-                      {inner}
-                    </a>
-                  ) : (
-                    inner
-                  )}
-                </BentoCell>
-              </li>
-            );
-          })}
+          {GRID.map((h) => (
+            <li key={h.id} data-honor-cell className="min-h-[280px]">
+              <HonorCell honor={h} />
+            </li>
+          ))}
         </ul>
       </div>
     </section>
+  );
+}
+
+function HonorCell({ honor }: { honor: Honor }) {
+  const inner = (
+    <div className="flex h-full flex-col p-6 md:p-7">
+      <div className="flex h-14 w-14 items-center justify-center rounded-sm border border-border bg-background/80 p-2">
+        <Image
+          src={honor.logo.src}
+          alt={honor.logo.alt}
+          width={56}
+          height={56}
+          className="h-full w-full object-contain"
+        />
+      </div>
+
+      <p className="relative mt-6 inline-block w-fit pb-2">
+        <span className="font-serif text-[clamp(1.75rem,3.6vw,2.5rem)] text-accent leading-[0.95] tracking-[-0.02em]">
+          {honor.highlight}
+        </span>
+        <span
+          data-underline
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 h-[3px] w-full origin-left scale-x-0 bg-accent"
+        />
+      </p>
+
+      <div className="mt-auto border-border border-t pt-5">
+        <h3 className="font-serif text-h3 leading-tight">{honor.org}</h3>
+        <p className="mt-2 font-mono text-muted-foreground text-small">
+          <DecryptedText text={honor.role} startOnView />
+        </p>
+        {honor.meta ? (
+          <p className="mt-1 font-mono text-muted-foreground text-small">{honor.meta}</p>
+        ) : null}
+      </div>
+    </div>
+  );
+
+  return (
+    <BentoCell className="mb-sharp h-full min-h-[280px]" particles={10}>
+      {honor.href ? (
+        <a
+          href={honor.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        >
+          {inner}
+        </a>
+      ) : (
+        inner
+      )}
+    </BentoCell>
   );
 }

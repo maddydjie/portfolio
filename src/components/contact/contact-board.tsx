@@ -177,6 +177,7 @@ export function ContactBoard({
                     ["Education", "/#education"],
                     ["Experience", "/#work"],
                     ["Research", "/#research"],
+                    ["Press", "/#press"],
                     ["Honors", "/#honors"],
                     ["Selected work", "/#selected-work"],
                   ] as const
