@@ -8,6 +8,10 @@ export const PRESS_FEATURE = {
   blurb:
     "She pursued MBBS and IIT Madras at the same time. Today she uses AI to advance cancer research.",
   href: "https://www.msn.com/en-in/health/other/she-pursued-mbbs-and-iit-madras-at-the-same-time-today-she-s-using-ai-to-advance-cancer-research/ar-AA289JZ0",
+  photo: {
+    src: "/press/toi-msn-graduation.jpg",
+    alt: "Dr Madhavi at Andhra Medical College convocation in academic regalia",
+  },
   /** Marquee chips — short, scannable. */
   ticker: [
     "FEATURED",

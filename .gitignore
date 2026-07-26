@@ -47,6 +47,10 @@ wordmark-*.png
 
 # local lab media (do not ship)
 *.mov
+/IMG_*.JPEG
+/IMG_*.JPG
+/IMG_*.jpg
+/IMG_*.HEIC
 /A-pixel.png
 /A2-pixel-mid.png
 /A3-pixel-coarse.png

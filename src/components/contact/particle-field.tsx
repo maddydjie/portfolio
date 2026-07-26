@@ -38,8 +38,8 @@ function sampleGlyph(w: number, h: number, text: string, step: number): Array<[n
   ctx.clearRect(0, 0, w, h);
 
   const chars = [...text];
-  // Own the band: prioritize height so words read huge, then fit to width.
-  let size = h * 0.88;
+  // Fit the band without shouting — height first, then clamp to width.
+  let size = h * 0.58;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
