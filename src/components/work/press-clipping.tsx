@@ -31,15 +31,18 @@ export function PressClipping() {
     const photo = photoRef.current;
     const caption = root.querySelector<HTMLElement>("[data-press-caption]");
     const cta = root.querySelector<HTMLElement>("[data-press-cta]");
+    const strip = root.querySelector<HTMLElement>("[data-press-strip]");
+    const outlets = root.querySelectorAll<HTMLElement>("[data-press-outlet]");
     const imgWrap = imgWrapRef.current;
     const spot = spotRef.current;
 
     if (prefersReducedMotion()) {
-      gsap.set([eye, well, clip, photo, caption, cta].filter(Boolean), {
+      gsap.set([eye, well, clip, photo, caption, cta, strip].filter(Boolean), {
         clearProps: "all",
       });
       if (bar) gsap.set(bar, { scaleY: 1 });
       gsap.set(rules, { scaleX: 1 });
+      gsap.set(outlets, { clearProps: "all" });
       return;
     }
 
@@ -55,6 +58,8 @@ export function PressClipping() {
       if (imgWrap) gsap.set(imgWrap, { scale: 1.06 });
       if (caption) gsap.set(caption, { opacity: 0, y: 10 });
       if (cta) gsap.set(cta, { opacity: 0, y: 8 });
+      if (strip) gsap.set(strip, { opacity: 0, y: 16 });
+      gsap.set(outlets, { opacity: 0, y: 10 });
       if (spot) gsap.set(spot, { opacity: 0 });
 
       const tl = gsap.timeline({
@@ -108,6 +113,12 @@ export function PressClipping() {
       }
       if (caption) tl.to(caption, { opacity: 1, y: 0, duration: 0.45 }, 0.55);
       if (cta) tl.to(cta, { opacity: 1, y: 0, duration: 0.4 }, 0.62);
+      if (strip) tl.to(strip, { opacity: 1, y: 0, duration: 0.45 }, 0.7);
+      tl.to(
+        outlets,
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 },
+        0.78,
+      );
     }, root);
 
     // Pointer spotlight on the photo only (desktop / fine pointer).
@@ -190,7 +201,7 @@ export function PressClipping() {
                   <p className="font-serif text-[clamp(1.5rem,3vw,2rem)] font-bold leading-none tracking-[-0.02em]">
                     The Times of India
                   </p>
-                  <p className="font-sans text-small font-bold tracking-[0.18em] text-foreground/70">
+                  <p className="font-sans text-[0.7rem] font-bold tracking-[0.16em] text-foreground/65 md:text-[0.75rem]">
                     MSN
                   </p>
                 </div>
@@ -271,6 +282,38 @@ export function PressClipping() {
             </div>
           </div>
         </a>
+
+        <div
+          data-press-strip
+          className="mt-8 border-hero-fg/10 border-t pt-6 md:mt-10 md:pt-7"
+        >
+          <p className="mb-4 font-mono text-[0.65rem] tracking-[0.2em] text-hero-muted">
+            ALSO FEATURED IN
+          </p>
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-3 md:gap-x-7">
+            {p.coverage.map((o) => {
+              const markClass =
+                "font-sans text-[0.8rem] font-semibold tracking-[0.06em] text-hero-fg/75 transition-colors md:text-[0.85rem]";
+              return (
+                <li key={o.id} data-press-outlet>
+                  {o.href ? (
+                    <a
+                      href={o.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={o.name ?? o.label}
+                      className={`${markClass} underline-offset-4 hover:text-hero-accent hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-hero-accent`}
+                    >
+                      {o.label}
+                    </a>
+                  ) : (
+                    <span className={markClass}>{o.label}</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </section>
   );
