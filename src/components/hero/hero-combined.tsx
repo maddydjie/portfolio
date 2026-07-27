@@ -61,7 +61,7 @@ export function HeroCombined() {
         const dy = window.innerHeight / 2 - (b.top + b.height / 2);
 
         gsap.set(word, { x: dx, y: dy, scale: 1.14, autoAlpha: 1 });
-        gsap.set(lede, { autoAlpha: 1 });
+        if (lede) gsap.set(lede, { autoAlpha: 1 });
         gsap.set(card, { xPercent: 36, autoAlpha: 0, scale: 0.92, y: 0 });
         gsap.set(copy, { autoAlpha: 0, y: 28 });
         if (linePath) gsap.set(linePath, { drawSVG: "0%" });
@@ -79,9 +79,9 @@ export function HeroCombined() {
             invalidateOnRefresh: true,
           },
         });
-        tl.to(word, { x: 0, y: 0, scale: 1, duration: 1, ease: "power2.inOut" }, 0)
-          .to(lede, { autoAlpha: 0, duration: 0.5 }, 0)
-          .to(hint, { autoAlpha: 0, duration: 0.35 }, 0);
+        tl.to(word, { x: 0, y: 0, scale: 1, duration: 1, ease: "power2.inOut" }, 0);
+        if (lede) tl.to(lede, { autoAlpha: 0, duration: 0.5 }, 0);
+        if (hint) tl.to(hint, { autoAlpha: 0, duration: 0.35 }, 0);
         tl.to(card, { xPercent: 0, autoAlpha: 1, scale: 1, duration: 1, ease: "power2.out" }, 0.55);
         tl.to(copy, { autoAlpha: 1, y: 0, duration: 0.7 }, 1.05);
         if (linePath) tl.to(linePath, { drawSVG: "100%", duration: 0.9 }, 1.15);
@@ -105,8 +105,8 @@ export function HeroCombined() {
           maxHeight: 0,
           overflow: "hidden",
         });
-        gsap.set(lede, { autoAlpha: 0 });
-        gsap.set(hint, { autoAlpha: 0 });
+        if (lede) gsap.set(lede, { autoAlpha: 0 });
+        if (hint) gsap.set(hint, { autoAlpha: 0 });
         gsap.set(word, {
           x: 0,
           y: 0,
@@ -117,15 +117,14 @@ export function HeroCombined() {
         if (linePath) gsap.set(linePath, { drawSVG: "0%" });
 
         // Arrival — name alone. Scroll hint after the name settles.
-        gsap
-          .timeline({ defaults: { ease: "power3.out" } })
-          .to(word, {
-            autoAlpha: 1,
-            filter: "blur(0px)",
-            scale: 1.04,
-            duration: 1,
-          })
-          .to(hint, { autoAlpha: 1, duration: 0.45 }, "-=0.2");
+        const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+        intro.to(word, {
+          autoAlpha: 1,
+          filter: "blur(0px)",
+          scale: 1.04,
+          duration: 1,
+        });
+        if (hint) intro.to(hint, { autoAlpha: 1, duration: 0.45 }, "-=0.2");
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
@@ -140,11 +139,8 @@ export function HeroCombined() {
           },
         });
 
-        tl.to(word, { scale: 1, duration: 0.7, ease: "power2.inOut" }, 0).to(
-          hint,
-          { autoAlpha: 0, duration: 0.25 },
-          0,
-        );
+        tl.to(word, { scale: 1, duration: 0.7, ease: "power2.inOut" }, 0);
+        if (hint) tl.to(hint, { autoAlpha: 0, duration: 0.25 }, 0);
         tl.to(
           copy,
           { autoAlpha: 1, y: 0, maxHeight: 480, duration: 0.7, ease: "power2.out" },
