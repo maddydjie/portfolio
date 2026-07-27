@@ -114,17 +114,20 @@ export function EducationStrip() {
           />
         </header>
 
-        <ul className="grid gap-10 border-border border-t pt-10 md:grid-cols-2 md:gap-14 md:pt-14">
+        <ul className="grid gap-12 border-border border-t pt-10 md:grid-cols-2 md:gap-14 md:pt-14">
           {EDUCATION.entries.map((e) => (
-            <li key={e.id} className="min-w-0">
-              <div data-ed-logo className="w-fit">
+            <li key={e.id} className="min-w-0 text-center md:text-left">
+              <div data-ed-logo className="mx-auto w-fit md:mx-0">
                 <TiltedCard max={11} className="w-fit">
                   <div className="flex h-24 w-24 items-center justify-center rounded-sm border border-border bg-surface p-3.5 md:h-28 md:w-28">
+                    {/* unoptimized: institution PNGs are tiny local assets; optimizer was
+                        failing AMC on some mobile/Vercel paths and showing a broken mark. */}
                     <Image
                       src={e.logo.src}
                       alt={e.logo.alt}
                       width={112}
                       height={112}
+                      unoptimized
                       className="h-full w-full object-contain"
                     />
                   </div>
@@ -141,7 +144,7 @@ export function EducationStrip() {
                     {e.proof}
                   </p>
                 ) : null}
-                <p className="mt-3 max-w-reading text-muted-foreground text-small leading-relaxed">
+                <p className="mx-auto mt-3 max-w-reading text-muted-foreground text-small leading-relaxed md:mx-0">
                   {e.detail}
                 </p>
               </div>

@@ -8,12 +8,28 @@ import { prefersReducedMotion } from "@/lib/motion";
 
 const STYLE_ID = "research-section-styles";
 const CSS = `
-.rs-stage{ display:grid; gap:.75rem; }
+.rs-stage{ display:grid; gap:.65rem; }
 @media (min-width:768px){ .rs-stage{ grid-template-columns:1fr 1fr; gap:1.25rem; } }
 .rs-pin{
   /* Fixed footprint so ScrollTrigger pin never measures a collapsed deck */
   min-height:22rem;
   background:#14120e;
+}
+@media (max-width:767px){
+  /* Phone: pin fills the screen and centres the deck so the lower paper
+     is not clipped by the browser chrome. */
+  .rs-pin{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:max(1rem, env(safe-area-inset-top));
+    padding-bottom:max(1.75rem, env(safe-area-inset-bottom));
+  }
+  .rs-card{ height:min(36svh, 15.25rem); }
+  .rs-face{ padding:1.15rem 1.25rem; }
+  .rs-back h3{ font-size:1.2rem; }
+  .rs-back p{ font-size:.82rem; line-height:1.45; }
 }
 .rs-card{
   position:relative; height:20rem; width:100%;
@@ -211,45 +227,73 @@ export function ResearchSection() {
         });
       });
 
-      // Pin the deck in place. Scroll distance = hold front + flip + hold back.
-      const tl = gsap.timeline({
-        defaults: { ease: "none" },
-        scrollTrigger: {
-          trigger: pin,
-          start: "top 18%",
-          end: "+=220%",
-          pin: true,
-          pinSpacing: true,
-          scrub: 0.7,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            // Flipped once we're past the flip beat (~40% of the pin timeline).
-            const on = self.progress >= 0.42;
-            if (on !== flippedRef.current) {
-              flippedRef.current = on;
-              setFlipped(on);
-            }
+      const mm = gsap.matchMedia();
+
+      mm.add("(max-width: 767px)", () => {
+        // Phone: pin the whole viewport so the deck sits in the middle.
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: pin,
+            start: "top top",
+            end: "+=240%",
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.7,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const on = self.progress >= 0.42;
+              if (on !== flippedRef.current) {
+                flippedRef.current = on;
+                setFlipped(on);
+              }
+            },
           },
-        },
+        });
+        tl.to({}, { duration: 0.7 });
+        cards.forEach((card) => {
+          const front = card.querySelector<HTMLElement>("[data-rs-front]");
+          const back = card.querySelector<HTMLElement>("[data-rs-back]");
+          if (!front || !back) return;
+          tl.to(front, { rotationY: -90, opacity: 0, duration: 0.45 }, 0.7);
+          tl.to(back, { rotationY: 0, opacity: 1, duration: 0.45 }, 0.95);
+        });
+        tl.to({}, { duration: 1.1 });
       });
 
-      // 0–0.35: hold ink front (look)
-      // 0.35–0.55: flip
-      // 0.55–1.0: hold paper back (look + click Open paper)
-      tl.to({}, { duration: 0.7 }); // hold front
-
-      cards.forEach((card) => {
-        const front = card.querySelector<HTMLElement>("[data-rs-front]");
-        const back = card.querySelector<HTMLElement>("[data-rs-back]");
-        if (!front || !back) return;
-        tl.to(front, { rotationY: -90, opacity: 0, duration: 0.45 }, 0.7);
-        tl.to(back, { rotationY: 0, opacity: 1, duration: 0.45 }, 0.95);
+      mm.add("(min-width: 768px)", () => {
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: pin,
+            start: "top 18%",
+            end: "+=220%",
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.7,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const on = self.progress >= 0.42;
+              if (on !== flippedRef.current) {
+                flippedRef.current = on;
+                setFlipped(on);
+              }
+            },
+          },
+        });
+        tl.to({}, { duration: 0.7 });
+        cards.forEach((card) => {
+          const front = card.querySelector<HTMLElement>("[data-rs-front]");
+          const back = card.querySelector<HTMLElement>("[data-rs-back]");
+          if (!front || !back) return;
+          tl.to(front, { rotationY: -90, opacity: 0, duration: 0.45 }, 0.7);
+          tl.to(back, { rotationY: 0, opacity: 1, duration: 0.45 }, 0.95);
+        });
+        tl.to({}, { duration: 1.1 });
       });
 
-      tl.to({}, { duration: 1.1 }); // hold back
-
-      // Refresh after layout so pin-spacer matches the real 20rem cards.
       requestAnimationFrame(() => ScrollTrigger.refresh());
     }, root);
 
@@ -311,7 +355,7 @@ export function ResearchSection() {
       <div ref={pinRef} className="rs-pin px-6 pb-16 pt-6 md:pb-20">
         <div
           ref={stageRef}
-          className="mx-auto max-w-wide border-t border-hero-fg/15 pt-6"
+          className="mx-auto w-full max-w-wide border-t border-hero-fg/15 pt-5 md:pt-6"
         >
           <div className={staticMode ? "grid gap-4 md:grid-cols-2" : "rs-stage"}>
             {RESEARCH_PAPERS.map((p) => (

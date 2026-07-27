@@ -139,12 +139,13 @@ export function HeroCombined() {
           },
         });
 
-        tl.to(word, { scale: 1, duration: 0.7, ease: "power2.inOut" }, 0);
+        tl.to(word, { scale: 1, duration: 0.55, ease: "power2.inOut" }, 0);
         if (hint) tl.to(hint, { autoAlpha: 0, duration: 0.25 }, 0);
+        // Short copy first, then photo into the middle of the stage, then meta.
         tl.to(
           copy,
-          { autoAlpha: 1, y: 0, maxHeight: 480, duration: 0.7, ease: "power2.out" },
-          0.28,
+          { autoAlpha: 1, y: 0, maxHeight: 220, duration: 0.55, ease: "power2.out" },
+          0.22,
         );
         tl.to(
           card,
@@ -152,13 +153,13 @@ export function HeroCombined() {
             autoAlpha: 1,
             y: 0,
             scale: 1,
-            maxHeight: 340,
-            duration: 0.75,
+            maxHeight: 420,
+            duration: 0.8,
             ease: "power2.out",
           },
-          0.48,
+          0.4,
         );
-        if (linePath) tl.to(linePath, { drawSVG: "100%", duration: 0.65 }, 0.55);
+        if (linePath) tl.to(linePath, { drawSVG: "100%", duration: 0.55 }, 0.7);
       });
     }, wrap);
 
@@ -174,69 +175,42 @@ export function HeroCombined() {
         data-stage
         className="relative flex h-[100svh] min-h-[100svh] w-full flex-col justify-center overflow-hidden px-6 py-[max(4.5rem,env(safe-area-inset-top))] md:h-screen md:min-h-0 md:py-0"
       >
-        <div className="mx-auto grid w-full max-w-wide grid-cols-1 items-center gap-0 md:grid-cols-[1.12fr_0.88fr] md:gap-14">
-          <div className="relative z-10 min-w-0">
-            <p
-              data-reveal-copy
-              className="hero-reveal mb-4 hidden items-center gap-2 font-mono text-small tracking-[0.2em] md:flex"
-            >
-              <span className="text-hero-muted">I DO</span>
-              <DecryptingRoles words={ROLES} className="text-hero-accent" />
-            </p>
+        <div className="mx-auto flex w-full max-w-wide flex-col items-center md:grid md:grid-cols-[1.12fr_0.88fr] md:items-center md:gap-14">
+          <p
+            data-reveal-copy
+            className="hero-reveal order-2 mt-4 flex items-center justify-center gap-2 font-mono text-small tracking-[0.2em] md:order-none md:col-start-1 md:row-start-1 md:mt-0 md:mb-4 md:justify-self-start"
+          >
+            <span className="text-hero-muted">I DO</span>
+            <DecryptingRoles words={ROLES} className="text-hero-accent" />
+          </p>
 
-            <h1
-              data-word
-              className="text-center text-[clamp(3.1rem,15vw,4.75rem)] leading-[0.92] tracking-[-0.01em] will-change-transform md:text-left md:text-[clamp(2.5rem,7vw,6.5rem)]"
-            >
-              <span className="pr-[0.14em] font-serif italic font-normal">Dr</span>
-              <span className="font-serif">Madh</span>
-              <span className="font-mono">avi</span>
-            </h1>
-
-            <div data-reveal-copy className="hero-reveal">
-              <p className="mt-5 flex items-center justify-center gap-2 font-mono text-small tracking-[0.2em] md:hidden">
-                <span className="text-hero-muted">I DO</span>
-                <DecryptingRoles words={ROLES} className="text-hero-accent" />
-              </p>
-
-              <p className="mt-4 max-w-[18ch] text-center font-serif text-[clamp(1.2rem,4.8vw,2.6rem)] text-hero-fg italic leading-[1.06] md:mt-7 md:text-left md:text-[clamp(1.5rem,3vw,2.6rem)] max-md:mx-auto">
-                I don&apos;t fit in boxes. I build bridges between them.
-              </p>
-              <p className="mt-3 max-w-[40ch] text-center text-[0.9rem] leading-relaxed text-hero-fg/72 md:mt-6 md:max-w-[48ch] md:text-left md:text-body max-md:mx-auto max-md:line-clamp-3">
-                I ran MBBS at Andhra Medical College and the IIT Madras BS in Data Science at the
-                same time. Wards on one rail, models on the other. Now I ship clinical AI that has to
-                work at the bedside.
-              </p>
-
-              <div className="mt-4 flex items-center justify-center gap-3 md:mt-7 md:justify-start">
-                <svg
-                  aria-hidden="true"
-                  className="h-2 w-[min(24vw,10rem)] shrink-0"
-                  viewBox="0 0 400 4"
-                  fill="none"
-                  preserveAspectRatio="none"
-                >
-                  <path data-line d="M0 2 H400" stroke="var(--color-hero-accent)" strokeWidth="2" />
-                </svg>
-                <p className="truncate font-mono text-hero-muted text-small md:whitespace-normal">
-                  {AFFILIATIONS.join("  ·  ")}
-                </p>
-              </div>
-
-              <p className="mt-5 text-center md:mt-8 md:text-left">
-                <Link
-                  href="#work"
-                  className="font-mono text-small tracking-[0.14em] text-hero-accent underline-offset-4 transition-colors hover:underline"
-                >
-                  View work →
-                </Link>
-              </p>
-            </div>
-          </div>
+          <h1
+            data-word
+            className="order-1 text-center text-[clamp(3.1rem,15vw,4.75rem)] leading-[0.92] tracking-[-0.01em] will-change-transform md:order-none md:col-start-1 md:row-start-2 md:justify-self-start md:text-left md:text-[clamp(2.5rem,7vw,6.5rem)]"
+          >
+            <span className="pr-[0.14em] font-serif italic font-normal">Dr</span>
+            <span className="font-serif">Madh</span>
+            <span className="font-mono">avi</span>
+          </h1>
 
           <div
+            data-reveal-copy
+            className="hero-reveal order-3 w-full md:order-none md:col-start-1 md:row-start-3"
+          >
+            <p className="mt-3 max-w-[16ch] text-center font-serif text-[clamp(1.15rem,4.6vw,2.6rem)] text-hero-fg italic leading-[1.06] md:mt-7 md:max-w-[18ch] md:text-left md:text-[clamp(1.5rem,3vw,2.6rem)] max-md:mx-auto">
+              I don&apos;t fit in boxes. I build bridges between them.
+            </p>
+            <p className="mt-6 hidden max-w-[48ch] text-body text-hero-fg/72 md:block">
+              I ran MBBS at Andhra Medical College and the IIT Madras BS in Data Science at the same
+              time. Wards on one rail, models on the other. Now I ship clinical AI that has to work at
+              the bedside.
+            </p>
+          </div>
+
+          {/* Phone: photo sits mid-stage between tagline and affiliations. */}
+          <div
             data-portrait
-            className="hero-reveal mx-auto mt-6 w-[min(11.5rem,44vw)] will-change-transform md:mx-0 md:mt-0 md:w-full md:max-w-none md:justify-self-end"
+            className="hero-reveal order-4 mx-auto mt-5 w-[min(13.5rem,52vw)] will-change-transform md:order-none md:col-start-2 md:row-start-1 md:row-span-5 md:mx-0 md:mt-0 md:w-full md:max-w-none md:justify-self-end md:self-center"
           >
             <ProfileCard
               name="Dr Madhavi"
@@ -245,6 +219,35 @@ export function HeroCombined() {
               status="Open to build"
               onContactClick={() => router.push("/contact")}
             />
+          </div>
+
+          <div
+            data-reveal-copy
+            className="hero-reveal order-5 mt-4 w-full md:order-none md:col-start-1 md:row-start-4 md:mt-7"
+          >
+            <div className="flex flex-col items-center gap-2 md:flex-row md:items-center md:justify-start md:gap-3">
+              <svg
+                aria-hidden="true"
+                className="h-2 w-16 shrink-0 md:w-[min(24vw,10rem)]"
+                viewBox="0 0 400 4"
+                fill="none"
+                preserveAspectRatio="none"
+              >
+                <path data-line d="M0 2 H400" stroke="var(--color-hero-accent)" strokeWidth="2" />
+              </svg>
+              <p className="max-w-[20rem] text-center font-mono text-[0.7rem] leading-relaxed text-hero-muted md:max-w-none md:text-left md:text-small">
+                {AFFILIATIONS.join(" · ")}
+              </p>
+            </div>
+
+            <p className="mt-4 text-center md:mt-8 md:text-left">
+              <Link
+                href="#work"
+                className="font-mono text-small tracking-[0.14em] text-hero-accent underline-offset-4 transition-colors hover:underline"
+              >
+                View work →
+              </Link>
+            </p>
           </div>
         </div>
 
