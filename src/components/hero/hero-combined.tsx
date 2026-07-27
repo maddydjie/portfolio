@@ -9,11 +9,17 @@ import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 import { ProfileCard } from "./profile-card";
 
-const ROLES = ["Medicine", "Data Scientist", "Space Researcher", "Clinical AI", "Photographer"];
+const ROLES = [
+  "Clinical Science",
+  "Data Science",
+  "Research",
+  "Leadership",
+  "Clinical AI",
+];
 
 // RISE & DOCK — scroll-scored hero. On load "Dr Madhavi" sits centred; on scroll
-// the wordmark docks left while ProfileCard slides in from the right and copy
-// staggers up. One pinned stage. Reduced-motion: resting docked layout, static.
+// the wordmark docks while ProfileCard + copy rise in. One pinned stage on
+// desktop and mobile. Reduced-motion: resting docked layout, static.
 export function HeroCombined() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -77,20 +83,40 @@ export function HeroCombined() {
         if (linePath) tl.to(linePath, { drawSVG: "100%", duration: 0.9 }, 1.2);
       });
 
-      // MOBILE — no pin. Name first, then card + copy on a short load-in.
+      // MOBILE — same rise & dock: name centres first, docks up; card rises
+      // from the bottom of the stage; copy staggers in under the name.
       mm.add("(max-width: 767px)", () => {
-        gsap.set(word, { x: 0, y: 0, scale: 1, opacity: 0, yPercent: 8, filter: "blur(8px)" });
-        gsap.set([copy, card, cta], { opacity: 0, y: 20 });
-        if (linePath) gsap.set(linePath, { drawSVG: "0%" });
-        if (lede) gsap.set(lede, { opacity: 0 });
-        if (hint) gsap.set(hint, { opacity: 0 });
+        gsap.set(word, { x: 0, y: 0, scale: 1 });
+        const b = word.getBoundingClientRect();
+        const dx = window.innerWidth / 2 - (b.left + b.width / 2);
+        const dy = window.innerHeight / 2 - (b.top + b.height / 2) - 10;
 
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-        tl.to(word, { opacity: 1, yPercent: 0, filter: "blur(0px)", duration: 0.7 })
-          .to(copy, { opacity: 1, y: 0, stagger: 0.08, duration: 0.5 }, "-=0.3")
-          .to(card, { opacity: 1, y: 0, duration: 0.6 }, "-=0.4")
-          .to(cta, { opacity: 1, y: 0, duration: 0.45 }, "-=0.35");
-        if (linePath) tl.to(linePath, { drawSVG: "100%", duration: 0.7 }, "<");
+        gsap.set(word, { x: dx, y: dy, scale: 1.12, opacity: 1 });
+        gsap.set([copy, cta], { opacity: 0, y: 22 });
+        gsap.set(card, { y: 64, opacity: 0, scale: 0.94 });
+        if (linePath) gsap.set(linePath, { drawSVG: "0%" });
+        if (lede) gsap.set(lede, { opacity: 1 });
+        if (hint) gsap.set(hint, { opacity: 1 });
+
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: wrap,
+            start: "top top",
+            end: "+=200%",
+            scrub: 0.65,
+            pin: stage,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        tl.to(word, { x: 0, y: 0, scale: 1, duration: 1, ease: "power2.inOut" }, 0)
+          .to(lede, { opacity: 0, duration: 0.45 }, 0)
+          .to(hint, { opacity: 0, duration: 0.3 }, 0);
+        tl.to(card, { y: 0, opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, 0.4);
+        tl.to([copy, cta], { opacity: 1, y: 0, stagger: 0.08, duration: 0.65 }, 0.85);
+        if (linePath) tl.to(linePath, { drawSVG: "100%", duration: 0.8 }, 0.9);
       });
     }, wrap);
 
@@ -101,13 +127,13 @@ export function HeroCombined() {
     <div ref={wrapRef} className="bg-hero-bg text-hero-fg">
       <div
         data-stage
-        className="relative flex min-h-screen w-full items-center overflow-hidden px-6 py-20 md:h-screen md:py-0"
+        className="relative flex h-[100svh] min-h-[100svh] w-full items-start overflow-hidden px-6 pt-[max(4.25rem,10svh)] pb-[min(42svh,20rem)] md:h-screen md:min-h-0 md:items-center md:py-0 md:pb-0"
       >
-        <div className="mx-auto grid w-full max-w-wide grid-cols-1 items-center gap-10 md:grid-cols-[1.12fr_0.88fr] md:gap-14">
-          <div className="relative z-10">
+        <div className="mx-auto grid w-full max-w-wide grid-cols-1 items-start md:grid-cols-[1.12fr_0.88fr] md:items-center md:gap-14">
+          <div className="relative z-10 min-w-0">
             <p
               data-copy
-              className="mb-4 flex items-center gap-2 font-mono text-small tracking-[0.2em]"
+              className="mb-3 flex items-center gap-2 font-mono text-small tracking-[0.2em] md:mb-4"
             >
               <span className="text-hero-muted">I DO</span>
               <DecryptingRoles words={ROLES} className="text-hero-accent" />
@@ -115,7 +141,7 @@ export function HeroCombined() {
 
             <h1
               data-word
-              className="text-[clamp(2.5rem,7vw,6.5rem)] leading-[0.92] tracking-[-0.01em] will-change-transform"
+              className="text-[clamp(2.75rem,12vw,6.5rem)] leading-[0.92] tracking-[-0.01em] will-change-transform md:text-[clamp(2.5rem,7vw,6.5rem)]"
             >
               <span className="pr-[0.14em] font-serif italic font-normal">Dr</span>
               <span className="font-serif">Madh</span>
@@ -124,17 +150,20 @@ export function HeroCombined() {
 
             <p
               data-copy
-              className="mt-7 max-w-[18ch] font-serif text-[clamp(1.5rem,3vw,2.6rem)] text-hero-fg italic leading-[1.06]"
+              className="mt-4 max-w-[18ch] font-serif text-[clamp(1.25rem,5vw,2.6rem)] text-hero-fg italic leading-[1.06] md:mt-7 md:text-[clamp(1.5rem,3vw,2.6rem)]"
             >
               I don&apos;t fit in boxes. I build bridges between them.
             </p>
-            <p data-copy className="mt-6 max-w-[48ch] text-body text-hero-fg/72">
+            <p
+              data-copy
+              className="mt-3 line-clamp-2 max-w-[48ch] text-[0.9rem] leading-relaxed text-hero-fg/72 md:mt-6 md:line-clamp-none md:text-body"
+            >
               I ran MBBS at Andhra Medical College and the IIT Madras BS in Data Science at the same
               time. Wards on one rail, models on the other. Now I ship clinical AI that has to work
               at the bedside.
             </p>
 
-            <div data-copy className="mt-7 flex items-center gap-3">
+            <div data-copy className="mt-4 flex items-center gap-3 md:mt-7">
               <svg
                 aria-hidden="true"
                 className="h-2 w-[min(24vw,10rem)] shrink-0"
@@ -144,10 +173,12 @@ export function HeroCombined() {
               >
                 <path data-line d="M0 2 H400" stroke="var(--color-hero-accent)" strokeWidth="2" />
               </svg>
-              <p className="font-mono text-hero-muted text-small">{AFFILIATIONS.join("  ·  ")}</p>
+              <p className="truncate font-mono text-hero-muted text-small md:whitespace-normal">
+                {AFFILIATIONS.join("  ·  ")}
+              </p>
             </div>
 
-            <p data-cta className="mt-8">
+            <p data-cta className="mt-4 md:mt-8">
               <Link
                 href="#work"
                 className="font-mono text-small tracking-[0.14em] text-hero-accent underline-offset-4 transition-colors hover:underline"
@@ -159,7 +190,7 @@ export function HeroCombined() {
 
           <div
             data-portrait
-            className="justify-self-center will-change-transform md:justify-self-end"
+            className="absolute bottom-[max(1.25rem,env(safe-area-inset-bottom))] left-1/2 z-10 w-[min(13.5rem,46vw)] -translate-x-1/2 will-change-transform md:static md:left-auto md:w-full md:max-w-none md:translate-x-0 md:justify-self-end"
           >
             <ProfileCard
               name="Dr Madhavi"
@@ -174,14 +205,14 @@ export function HeroCombined() {
         {/* scannable one-liner — visible with the centred name before scroll */}
         <p
           data-lede
-          className="pointer-events-none absolute top-[59%] left-1/2 z-20 hidden max-w-[42ch] -translate-x-1/2 px-4 text-center font-mono text-hero-muted text-small tracking-[0.18em] md:block"
+          className="pointer-events-none absolute top-[58%] left-1/2 z-20 max-w-[36ch] -translate-x-1/2 px-5 text-center font-mono text-[0.65rem] text-hero-muted tracking-[0.16em] md:top-[59%] md:max-w-[42ch] md:px-4 md:text-small md:tracking-[0.18em]"
         >
           CLINICIAN + DATA SCIENTIST — CLINICAL AI · RWE · MULTIMODAL HEALTH
         </p>
 
         <span
           data-hint
-          className="absolute bottom-6 left-1/2 z-30 -translate-x-1/2 font-mono text-hero-muted text-small tracking-widest"
+          className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 z-30 -translate-x-1/2 font-mono text-hero-muted text-small tracking-widest"
         >
           scroll ↓
         </span>
