@@ -7,8 +7,8 @@ import { CONTACT } from "@/content/contact";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 
-/** Kinetic band words — avoid "SIGNAL" (section eyebrow already owns that). */
-const PARTICLE_WORDS = ["CLINICIAN", "BUILDER", "BRIDGE", "SHIP"] as const;
+/** Kinetic band words — short enough to read on a phone band. */
+const PARTICLE_WORDS = ["CARE", "BUILD", "BRIDGE", "SHIP"] as const;
 
 export function ContactBoard({
   headingLevel = "h1",
@@ -85,7 +85,7 @@ export function ContactBoard({
         <div className="mt-6 border-hero-accent/40 border-y md:mt-8">
           <ParticleField
             words={PARTICLE_WORDS}
-            className="h-[clamp(12rem,36vh,22rem)] w-full md:h-[clamp(14rem,40vh,26rem)]"
+            className="h-[clamp(9.5rem,34vw,14rem)] w-full md:h-[clamp(14rem,40vh,26rem)]"
           />
         </div>
       </section>

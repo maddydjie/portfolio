@@ -103,3 +103,16 @@
     background-color: color-mix(in srgb, var(--color-accent) 18%, transparent);
   }
 }
+
+/* Phone hero: collapse reveal content until JS boots — name-only first paint. */
+@media (max-width: 767px) {
+  [data-hero]:not([data-hero-ready]) .hero-reveal {
+    max-height: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+  }
+}

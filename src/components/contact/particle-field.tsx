@@ -38,13 +38,15 @@ function sampleGlyph(w: number, h: number, text: string, step: number): Array<[n
   ctx.clearRect(0, 0, w, h);
 
   const chars = [...text];
-  // Fit the band without shouting — height first, then clamp to width.
-  let size = h * 0.58;
+  // Phone bands are wide-and-short — bias size to width so glyphs stay legible.
+  const narrow = w < 520;
+  let size = narrow ? Math.min(h * 0.72, w / Math.max(chars.length * 0.62, 3)) : h * 0.58;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   // Tighter corridors on long words so they can still fill the height.
-  const gapFor = (s: number) => Math.max(step * 1.8, s * (chars.length > 5 ? 0.12 : 0.2));
+  const gapFor = (s: number) =>
+    Math.max(step * (narrow ? 1.2 : 1.8), s * (chars.length > 5 ? (narrow ? 0.08 : 0.12) : 0.2));
   const measure = (s: number) => {
     ctx.font = `900 ${s}px ${FAMILY}`;
     let total = 0;
@@ -54,8 +56,9 @@ function sampleGlyph(w: number, h: number, text: string, step: number): Array<[n
   };
 
   let total = measure(size);
-  if (total > w * 0.96 && total > 1) {
-    size *= (w * 0.96) / total;
+  const maxW = w * (narrow ? 0.92 : 0.96);
+  if (total > maxW && total > 1) {
+    size *= maxW / total;
     total = measure(size);
   }
 
@@ -190,8 +193,8 @@ export function ParticleField({
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // Denser lattice on large canvases so big glyphs stay crisp.
-      step = Math.max(5, Math.round(Math.min(w, h) / 48));
+      // Denser lattice on large canvases; slightly coarser on phones so letters read.
+      step = w < 520 ? Math.max(6, Math.round(Math.min(w, h) / 36)) : Math.max(5, Math.round(Math.min(w, h) / 48));
       const first = words[wordIndex] ?? words[0];
       if (first) applyWord(first, true);
     };
@@ -223,6 +226,13 @@ export function ParticleField({
       my = -9999;
       window.clearInterval(hoverTimer);
       hoverTimer = 0;
+    };
+
+    const onPointerUp = (e: PointerEvent) => {
+      // Touch has no hover — tap cycles the word.
+      if (e.pointerType === "touch" || e.pointerType === "pen") {
+        advanceWord();
+      }
     };
 
     const onKey = (e: KeyboardEvent) => {
@@ -307,6 +317,7 @@ export function ParticleField({
         wrap.addEventListener("pointerenter", onEnter);
         wrap.addEventListener("pointermove", onMove);
         wrap.addEventListener("pointerleave", onLeave);
+        wrap.addEventListener("pointerup", onPointerUp);
         wrap.addEventListener("keydown", onKey);
         window.addEventListener("resize", resize);
       }
@@ -321,6 +332,7 @@ export function ParticleField({
       wrap.removeEventListener("pointerenter", onEnter);
       wrap.removeEventListener("pointermove", onMove);
       wrap.removeEventListener("pointerleave", onLeave);
+      wrap.removeEventListener("pointerup", onPointerUp);
       wrap.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", resize);
     };
@@ -332,15 +344,16 @@ export function ParticleField({
       ref={wrapRef}
       role="button"
       tabIndex={0}
-      aria-label="Word animation. Hover to change word."
+      aria-label="Word animation. Tap or hover to change word."
       className={`relative w-full cursor-crosshair overflow-hidden bg-hero-bg outline-none focus-visible:ring-2 focus-visible:ring-hero-accent focus-visible:ring-offset-2 focus-visible:ring-offset-hero-bg ${className}`}
     >
       <canvas ref={canvasRef} className="block h-full w-full" />
       <span ref={labelRef} className="sr-only">
         {words[0]}
       </span>
-      <p className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[0.65rem] tracking-[0.16em] text-hero-muted">
-        Hover to change word
+      <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 font-mono text-[0.7rem] tracking-[0.14em] text-hero-muted md:bottom-4 md:text-[0.65rem] md:tracking-[0.16em]">
+        <span className="md:hidden">Tap to change word</span>
+        <span className="hidden md:inline">Hover to change word</span>
       </p>
     </div>
   );
