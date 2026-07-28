@@ -104,15 +104,64 @@
   }
 }
 
-/* Phone hero: collapse reveal content until JS boots — name-only first paint. */
+/* Phone hero phases — intro = name only; docked = compact stack that fits 100svh. */
 @media (max-width: 767px) {
-  [data-hero]:not([data-hero-ready]) .hero-reveal {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    overflow: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    pointer-events: none !important;
+  [data-hero] .hero-stage {
+    justify-content: center;
+    padding-top: max(4.5rem, env(safe-area-inset-top));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  /* Before JS / intro: hide everything except the name. */
+  [data-hero]:not([data-hero-ready]) .hero-reveal,
+  [data-hero][data-hero-phase="intro"] .hero-reveal {
+    display: none !important;
+  }
+
+  [data-hero][data-hero-phase="intro"] .hero-stack {
+    justify-content: center;
+  }
+
+  /* Docked: even vertical rhythm so photo sits mid-screen, not crushed. */
+  [data-hero][data-hero-phase="docked"] .hero-stage {
+    justify-content: flex-start;
+  }
+
+  [data-hero][data-hero-phase="docked"] .hero-stack {
+    justify-content: space-between;
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+    gap: 0;
+  }
+
+  [data-hero][data-hero-phase="docked"] .hero-name {
+    order: 1;
+    font-size: clamp(2.4rem, 11vw, 3.1rem);
+  }
+
+  [data-hero][data-hero-phase="docked"] .hero-ido {
+    order: 2;
+    margin-top: 0.65rem;
+  }
+
+  [data-hero][data-hero-phase="docked"] .hero-tagline {
+    order: 3;
+    margin-top: 0.55rem;
+    margin-inline: auto;
+  }
+
+  [data-hero][data-hero-phase="docked"] .hero-photo {
+    order: 4;
+    margin-top: 0.85rem;
+    margin-bottom: 0.35rem;
+  }
+
+  [data-hero][data-hero-phase="docked"] .hero-meta {
+    order: 5;
+    margin-top: 0.35rem;
+  }
+
+  [data-hero][data-hero-phase="docked"] .hero-bio {
+    display: none !important;
   }
 }
