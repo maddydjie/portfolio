@@ -118,9 +118,11 @@ export function ParticleField({
     let my = -9999;
     let running = true;
     let lastCycle = 0;
-    let hoverTimer = 0;
-    const CYCLE_COOLDOWN = 1600;
-    const HOVER_INTERVAL = 2400;
+    let morphTimer = 0;
+    let springMul = 1;
+    let reformingUntil = 0;
+    const CYCLE_COOLDOWN = 900;
+    const BURST_MS = 340;
 
     const ink = "#14120e";
     const paper = "#f4f1e9";
@@ -137,30 +139,46 @@ export function ParticleField({
       if (labelRef.current) labelRef.current.textContent = text;
     };
 
+    const shuffle = <T,>(arr: T[]) => {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const a = arr[i];
+        const b = arr[j];
+        if (a !== undefined && b !== undefined) {
+          arr[i] = b;
+          arr[j] = a;
+        }
+      }
+      return arr;
+    };
+
+    const spawnParticle = (): Particle => ({
+      hx: 0,
+      hy: 0,
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: 0,
+      vy: 0,
+      phase: Math.random() * Math.PI * 2,
+      accent: false,
+      a: 0,
+      ta: 0,
+      active: false,
+    });
+
     const applyWord = (text: string, instant: boolean) => {
       const homes = sampleGlyph(w, h, text, step);
-      const count = Math.max(homes.length, particles.length);
+      while (particles.length < homes.length) particles.push(spawnParticle());
+
+      // Random particle ↔ home pairing so the reform feels like a cloud, not a morph.
+      const pOrder = shuffle(particles.map((_, i) => i));
+      const homeOrder = shuffle(homes.map((home) => home));
+
       let accentN = 0;
-      for (let i = 0; i < count; i++) {
-        let p = particles[i];
-        if (!p) {
-          // Spawn scattered so it flies in to assemble.
-          p = {
-            hx: 0,
-            hy: 0,
-            x: Math.random() * w,
-            y: Math.random() * h,
-            vx: 0,
-            vy: 0,
-            phase: Math.random() * Math.PI * 2,
-            accent: false,
-            a: 0,
-            ta: 0,
-            active: false,
-          };
-          particles[i] = p;
-        }
-        const home = homes[i];
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[pOrder[i] ?? i];
+        if (!p) continue;
+        const home = homeOrder[i];
         if (home) {
           p.hx = home[0];
           p.hy = home[1];
@@ -171,16 +189,33 @@ export function ParticleField({
             p.x = p.hx;
             p.y = p.hy;
             p.a = 1;
+            p.vx = 0;
+            p.vy = 0;
           }
         } else {
-          // No home in this word — drift out and fade.
           p.active = false;
           p.ta = 0;
-          p.hx = p.x + (Math.random() - 0.5) * 60;
-          p.hy = p.y + (Math.random() - 0.5) * 60;
+          p.hx = p.x + (Math.random() - 0.5) * 80;
+          p.hy = p.y + (Math.random() - 0.5) * 80;
         }
       }
       setLabel(text);
+    };
+
+    const burstCloud = () => {
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      for (const p of particles) {
+        const dx = p.x - cx + (Math.random() - 0.5) * 24;
+        const dy = p.y - cy + (Math.random() - 0.5) * 24;
+        const d = Math.hypot(dx, dy) || 1;
+        const force = 9 + Math.random() * 12;
+        p.vx += (dx / d) * force;
+        p.vy += (dy / d) * force;
+        p.active = false;
+        p.ta = 0.55;
+      }
+      springMul = 0.12;
     };
 
     const resize = () => {
@@ -206,7 +241,16 @@ export function ParticleField({
       lastCycle = now;
       wordIndex = (wordIndex + 1) % words.length;
       const next = words[wordIndex];
-      if (next) applyWord(next, false);
+      if (!next) return;
+
+      // Scatter first, then spring into the next letterforms.
+      window.clearTimeout(morphTimer);
+      burstCloud();
+      morphTimer = window.setTimeout(() => {
+        applyWord(next, false);
+        springMul = 1.45;
+        reformingUntil = performance.now() + 700;
+      }, BURST_MS);
     };
 
     const onMove = (e: PointerEvent) => {
@@ -215,24 +259,13 @@ export function ParticleField({
       my = e.clientY - r.top;
     };
 
-    const onEnter = () => {
-      advanceWord();
-      window.clearInterval(hoverTimer);
-      hoverTimer = window.setInterval(advanceWord, HOVER_INTERVAL);
-    };
-
     const onLeave = () => {
       mx = -9999;
       my = -9999;
-      window.clearInterval(hoverTimer);
-      hoverTimer = 0;
     };
 
-    const onPointerUp = (e: PointerEvent) => {
-      // Touch has no hover — tap cycles the word.
-      if (e.pointerType === "touch" || e.pointerType === "pen") {
-        advanceWord();
-      }
+    const onPointerUp = () => {
+      advanceWord();
     };
 
     const onKey = (e: KeyboardEvent) => {
@@ -260,9 +293,13 @@ export function ParticleField({
         const tx = p.hx + Math.sin(t * 1.3 + p.phase) * shimmer;
         const ty = p.hy + Math.cos(t * 1.1 + p.phase) * shimmer;
 
-        // Spring toward home.
-        p.vx += (tx - p.x) * spring;
-        p.vy += (ty - p.y) * spring;
+        // Spring toward home (weaker while bursting, snappier while reforming).
+        if (reformingUntil && performance.now() > reformingUntil) {
+          springMul = 1;
+          reformingUntil = 0;
+        }
+        p.vx += (tx - p.x) * spring * springMul;
+        p.vy += (ty - p.y) * spring * springMul;
 
         // Cursor repulsion.
         if (hasCursor) {
@@ -314,7 +351,6 @@ export function ParticleField({
           p.a = 0;
         }
         raf = requestAnimationFrame(tick);
-        wrap.addEventListener("pointerenter", onEnter);
         wrap.addEventListener("pointermove", onMove);
         wrap.addEventListener("pointerleave", onLeave);
         wrap.addEventListener("pointerup", onPointerUp);
@@ -327,9 +363,8 @@ export function ParticleField({
       running = false;
       cancelAnimationFrame(boot);
       cancelAnimationFrame(raf);
-      window.clearInterval(hoverTimer);
+      window.clearTimeout(morphTimer);
       particles = [];
-      wrap.removeEventListener("pointerenter", onEnter);
       wrap.removeEventListener("pointermove", onMove);
       wrap.removeEventListener("pointerleave", onLeave);
       wrap.removeEventListener("pointerup", onPointerUp);
@@ -344,7 +379,7 @@ export function ParticleField({
       ref={wrapRef}
       role="button"
       tabIndex={0}
-      aria-label="Word animation. Tap or hover to change word."
+      aria-label="Word animation. Tap or click to change word."
       className={`relative w-full cursor-crosshair overflow-hidden bg-hero-bg outline-none focus-visible:ring-2 focus-visible:ring-hero-accent focus-visible:ring-offset-2 focus-visible:ring-offset-hero-bg ${className}`}
     >
       <canvas ref={canvasRef} className="block h-full w-full" />
@@ -352,8 +387,7 @@ export function ParticleField({
         {words[0]}
       </span>
       <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 font-mono text-[0.7rem] tracking-[0.14em] text-hero-muted md:bottom-4 md:text-[0.65rem] md:tracking-[0.16em]">
-        <span className="md:hidden">Tap to change word</span>
-        <span className="hidden md:inline">Hover to change word</span>
+        Tap to change word
       </p>
     </div>
   );

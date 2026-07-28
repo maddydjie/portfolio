@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { DecryptedText } from "@/components/text/decrypted-text";
 import { AFFILIATIONS } from "@/content/landing";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -199,7 +198,7 @@ export function HeroCombined() {
           <div
             data-portrait
             data-reveal
-            className="hero-reveal hero-photo mx-auto w-[min(19.5rem,84vw,calc(50dvh*0.78))] will-change-transform md:col-start-2 md:row-start-1 md:row-span-6 md:mx-0 md:w-full md:max-w-[22rem] md:justify-self-end md:self-center"
+            className="hero-reveal hero-photo mx-auto w-[min(17.5rem,78vw,calc(44dvh*0.78))] will-change-transform md:col-start-2 md:row-start-1 md:row-span-6 md:mx-0 md:w-full md:max-w-[22rem] md:justify-self-end md:self-center"
           >
             <ProfileCard
               className="mx-auto"
@@ -260,19 +259,37 @@ export function HeroCombined() {
 function DecryptingRoles({
   words,
   className = "",
-  intervalMs = 2400,
+  intervalMs = 2800,
 }: {
   words: string[];
   className?: string;
   intervalMs?: number;
 }) {
   const [i, setI] = useState(0);
+  const [shown, setShown] = useState(true);
 
   useEffect(() => {
     if (prefersReducedMotion() || words.length < 2) return;
-    const id = setInterval(() => setI((n) => (n + 1) % words.length), intervalMs);
-    return () => clearInterval(id);
+    let fadeTimer = 0;
+    const id = window.setInterval(() => {
+      setShown(false);
+      fadeTimer = window.setTimeout(() => {
+        setI((n) => (n + 1) % words.length);
+        setShown(true);
+      }, 160);
+    }, intervalMs);
+    return () => {
+      window.clearInterval(id);
+      window.clearTimeout(fadeTimer);
+    };
   }, [words, intervalMs]);
 
-  return <DecryptedText text={words[i] ?? words[0]} className={className} replayKey={i} />;
+  // Soft crossfade — the scramble glyph cycle reads as broken on a phone.
+  return (
+    <span
+      className={`inline-block transition-opacity duration-200 ease-out ${shown ? "opacity-100" : "opacity-0"} ${className}`}
+    >
+      {words[i] ?? words[0]}
+    </span>
+  );
 }
