@@ -198,7 +198,7 @@ export function HeroCombined() {
           <div
             data-portrait
             data-reveal
-            className="hero-reveal hero-photo mx-auto w-[min(17.5rem,78vw,calc(44dvh*0.78))] will-change-transform md:col-start-2 md:row-start-1 md:row-span-6 md:mx-0 md:w-full md:max-w-[22rem] md:justify-self-end md:self-center"
+            className="hero-reveal hero-photo mx-auto w-[min(18.5rem,82vw,calc(52dvh*0.72))] will-change-transform md:col-start-2 md:row-start-1 md:row-span-6 md:mx-0 md:w-full md:max-w-[22rem] md:justify-self-end md:self-center"
           >
             <ProfileCard
               className="mx-auto"

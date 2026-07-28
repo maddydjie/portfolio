@@ -118,7 +118,7 @@ function PaperCard({
       aria-label={
         flipped
           ? `Open ${paper.title} paper`
-          : `${paper.title} — scroll to flip`
+          : `${paper.title} - scroll to flip`
       }
       onClick={onActivate}
     >
@@ -173,11 +173,12 @@ export function ResearchSection() {
   const rootRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const flippedRef = useRef(false);
+  /** Per-card flip flags — card 0 first, then card 1 on further scroll. */
+  const flippedRef = useRef<boolean[]>([]);
   const [staticMode] = useState(() =>
     typeof window !== "undefined" ? prefersReducedMotion() : false,
   );
-  const [flipped, setFlipped] = useState(false);
+  const [flippedMap, setFlippedMap] = useState<boolean[]>([]);
 
   useEffect(() => {
     injectStyles();
@@ -193,6 +194,16 @@ export function ResearchSection() {
 
     const intro = root.querySelectorAll<HTMLElement>("[data-rs-intro]");
     const cards = Array.from(stage.querySelectorAll<HTMLElement>("[data-rs-card]"));
+    flippedRef.current = cards.map(() => false);
+    setFlippedMap(cards.map(() => false));
+
+    const syncFlipped = (next: boolean[]) => {
+      const prev = flippedRef.current;
+      const changed = next.some((v, i) => v !== prev[i]);
+      if (!changed) return;
+      flippedRef.current = next;
+      setFlippedMap(next);
+    };
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -227,71 +238,51 @@ export function ResearchSection() {
         });
       });
 
+      const buildFlipTimeline = (start: string, end: string) => {
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: pin,
+            start,
+            end,
+            pin: true,
+            pinSpacing: true,
+            scrub: 0.7,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              // Hold → flip 01 → hold → flip 02 → hold.
+              const p = self.progress;
+              const next = cards.map((_, i) => {
+                if (i === 0) return p >= 0.28;
+                if (i === 1) return p >= 0.62;
+                return p >= 0.62;
+              });
+              syncFlipped(next);
+            },
+          },
+        });
+
+        // Beat structure (scrubbed): settle, card1 flip, beat, card2 flip, read.
+        tl.to({}, { duration: 0.55 });
+        cards.forEach((card, i) => {
+          const front = card.querySelector<HTMLElement>("[data-rs-front]");
+          const back = card.querySelector<HTMLElement>("[data-rs-back]");
+          if (!front || !back) return;
+          const at = i === 0 ? 0.55 : 1.35;
+          tl.to(front, { rotationY: -90, opacity: 0, duration: 0.4 }, at);
+          tl.to(back, { rotationY: 0, opacity: 1, duration: 0.4 }, at + 0.22);
+        });
+        tl.to({}, { duration: 0.9 });
+        return tl;
+      };
+
       const mm = gsap.matchMedia();
-
       mm.add("(max-width: 767px)", () => {
-        // Phone: pin the whole viewport so the deck sits in the middle.
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: pin,
-            start: "top top",
-            end: "+=240%",
-            pin: true,
-            pinSpacing: true,
-            scrub: 0.7,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const on = self.progress >= 0.42;
-              if (on !== flippedRef.current) {
-                flippedRef.current = on;
-                setFlipped(on);
-              }
-            },
-          },
-        });
-        tl.to({}, { duration: 0.7 });
-        cards.forEach((card) => {
-          const front = card.querySelector<HTMLElement>("[data-rs-front]");
-          const back = card.querySelector<HTMLElement>("[data-rs-back]");
-          if (!front || !back) return;
-          tl.to(front, { rotationY: -90, opacity: 0, duration: 0.45 }, 0.7);
-          tl.to(back, { rotationY: 0, opacity: 1, duration: 0.45 }, 0.95);
-        });
-        tl.to({}, { duration: 1.1 });
+        buildFlipTimeline("top top", "+=280%");
       });
-
       mm.add("(min-width: 768px)", () => {
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: pin,
-            start: "top 18%",
-            end: "+=220%",
-            pin: true,
-            pinSpacing: true,
-            scrub: 0.7,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const on = self.progress >= 0.42;
-              if (on !== flippedRef.current) {
-                flippedRef.current = on;
-                setFlipped(on);
-              }
-            },
-          },
-        });
-        tl.to({}, { duration: 0.7 });
-        cards.forEach((card) => {
-          const front = card.querySelector<HTMLElement>("[data-rs-front]");
-          const back = card.querySelector<HTMLElement>("[data-rs-back]");
-          if (!front || !back) return;
-          tl.to(front, { rotationY: -90, opacity: 0, duration: 0.45 }, 0.7);
-          tl.to(back, { rotationY: 0, opacity: 1, duration: 0.45 }, 0.95);
-        });
-        tl.to({}, { duration: 1.1 });
+        buildFlipTimeline("top 18%", "+=260%");
       });
 
       requestAnimationFrame(() => ScrollTrigger.refresh());
@@ -300,8 +291,8 @@ export function ResearchSection() {
     return () => ctx.revert();
   }, [staticMode]);
 
-  const onActivate = (paper: ResearchPaper) => {
-    if (staticMode || flippedRef.current || flipped) {
+  const onActivate = (paper: ResearchPaper, index: number) => {
+    if (staticMode || flippedRef.current[index] || flippedMap[index]) {
       openPaper(paper.href);
     }
   };
@@ -347,23 +338,20 @@ export function ResearchSection() {
             data-rs-intro
             className="mt-4 font-mono text-[0.72rem] tracking-wider text-hero-muted"
           >
-            Scroll locks the deck — flip, look, then click Open paper.
+            Scroll to flip each paper in turn, then open the DOI.
           </p>
         ) : null}
       </div>
 
       <div ref={pinRef} className="rs-pin px-6 pb-16 pt-6 md:pb-20">
-        <div
-          ref={stageRef}
-          className="mx-auto w-full max-w-wide border-t border-hero-fg/15 pt-5 md:pt-6"
-        >
+        <div ref={stageRef} className="mx-auto w-full max-w-wide pt-2 md:pt-4">
           <div className={staticMode ? "grid gap-4 md:grid-cols-2" : "rs-stage"}>
-            {RESEARCH_PAPERS.map((p) => (
+            {RESEARCH_PAPERS.map((p, i) => (
               <PaperCard
                 key={p.id}
                 paper={p}
-                flipped={flipped}
-                onActivate={() => onActivate(p)}
+                flipped={Boolean(flippedMap[i])}
+                onActivate={() => onActivate(p, i)}
                 staticMode={staticMode}
               />
             ))}

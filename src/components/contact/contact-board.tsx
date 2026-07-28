@@ -73,8 +73,8 @@ export function ContactBoard({
       if (rule) gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
       if (mail) gsap.set(mail, { opacity: 0, y: 22 });
       gsap.set(actions, { opacity: 0, y: 10 });
-      gsap.set(panels, { opacity: 0, y: 28 });
-      gsap.set(rows, { opacity: 0, y: 14 });
+      gsap.set(panels, { opacity: 0, y: 32 });
+      gsap.set(rows, { opacity: 0, y: 18, scale: 0.98 });
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
@@ -99,12 +99,12 @@ export function ContactBoard({
       );
       tl.to(
         panels,
-        { opacity: 1, y: 0, duration: 0.55, stagger: 0.1 },
+        { opacity: 1, y: 0, duration: 0.55, stagger: 0.12 },
         0.5,
       );
       tl.to(
         rows,
-        { opacity: 1, y: 0, duration: 0.4, stagger: 0.045 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.055 },
         0.62,
       );
     }, reach);
@@ -169,7 +169,7 @@ export function ContactBoard({
           </div>
         </div>
 
-        <div className="mt-6 border-hero-accent/40 border-y md:mt-8">
+        <div className="mt-5 md:mt-7">
           <ParticleField
             words={PARTICLE_WORDS}
             className="h-[clamp(9.5rem,34vw,14rem)] w-full md:h-[clamp(14rem,40vh,26rem)]"
@@ -213,7 +213,7 @@ export function ContactBoard({
 
             <div
               data-reach-mail
-              className="relative border border-foreground/18 bg-[color-mix(in_srgb,var(--color-background)_86%,var(--color-accent)_8%)] px-5 py-5 md:px-6 md:py-6"
+              className="relative border border-foreground/28 bg-[color-mix(in_srgb,var(--color-background)_78%,var(--color-accent)_14%)] px-5 py-5 shadow-[0_16px_40px_-28px_rgba(40,20,16,0.35)] md:px-6 md:py-6"
             >
               <div
                 aria-hidden="true"
@@ -261,7 +261,7 @@ export function ContactBoard({
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center justify-between gap-4 border border-foreground/18 bg-background px-4 py-3.5 text-foreground transition-[background-color,border-color,color,transform] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-5 md:py-4"
+                      className="group flex items-center justify-between gap-4 border border-foreground/28 bg-[color-mix(in_srgb,var(--color-background)_94%,var(--color-foreground)_4%)] px-4 py-3.5 text-foreground shadow-[0_10px_28px_-24px_rgba(40,20,16,0.4)] transition-[background-color,border-color,color,transform,box-shadow] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg hover:shadow-[0_18px_36px_-22px_rgba(20,18,14,0.55)] focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-5 md:py-4"
                     >
                       <span className="min-w-0">
                         <span className="block font-serif text-[1.15rem] leading-none md:text-[1.35rem]">
@@ -292,7 +292,7 @@ export function ContactBoard({
                   <li key={href} data-reach-row>
                     <Link
                       href={href}
-                      className="group flex h-full items-center justify-between gap-2 border border-foreground/18 bg-background px-3 py-3 text-foreground transition-[background-color,border-color,color,transform] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-4 md:py-3.5"
+                      className="group flex h-full items-center justify-between gap-2 border border-foreground/28 bg-[color-mix(in_srgb,var(--color-background)_94%,var(--color-foreground)_4%)] px-3 py-3 text-foreground shadow-[0_10px_28px_-24px_rgba(40,20,16,0.4)] transition-[background-color,border-color,color,transform,box-shadow] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg hover:shadow-[0_18px_36px_-22px_rgba(20,18,14,0.55)] focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-4 md:py-3.5"
                     >
                       <span className="font-serif text-[0.95rem] leading-tight md:text-body">
                         {label}

@@ -145,18 +145,14 @@
     margin-inline: auto;
   }
 
+  /* Name lives on the profile card — keep the wordmark out once docked. */
   [data-hero][data-hero-phase="docked"] .hero-name {
-    order: 1;
-    width: 100%;
-    text-align: center;
-    font-size: clamp(2.55rem, 11.5vw, 3.35rem);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
+    display: none !important;
   }
 
   [data-hero][data-hero-phase="docked"] .hero-ido {
-    order: 2;
-    margin-top: 0.1rem;
+    order: 1;
+    margin-top: 0;
     justify-content: center;
     letter-spacing: 0.16em;
   }
@@ -167,12 +163,12 @@
   }
 
   [data-hero][data-hero-phase="docked"] .hero-photo {
-    order: 3;
+    order: 2;
     display: block;
-    width: min(17.5rem, 78vw, calc(44dvh * 0.78));
-    max-width: min(17.5rem, 78vw, calc(44dvh * 0.78));
+    width: min(18.5rem, 82vw, calc(52dvh * 0.72));
+    max-width: min(18.5rem, 82vw, calc(52dvh * 0.72));
     margin-inline: auto;
-    margin-top: 0.55rem;
+    margin-top: 0.45rem;
     margin-bottom: 0.2rem;
     align-self: center;
     flex-shrink: 0;
@@ -184,29 +180,23 @@
     margin-inline: auto;
   }
 
-  /* Clean portrait on phone — no duplicate name / clipped Contact bar. */
-  [data-hero][data-hero-phase="docked"] .pcb-top,
-  [data-hero][data-hero-phase="docked"] .pcb-name,
-  [data-hero][data-hero-phase="docked"] .pcb-bar {
-    display: none !important;
-  }
-
+  /* Restore the profile card chrome on phone (same copy as desktop). */
   [data-hero][data-hero-phase="docked"] .pcb-vignette {
     background: linear-gradient(
       to top,
-      rgba(20, 18, 14, 0.45) 0%,
-      transparent 34%
+      rgba(20, 18, 14, 0.92) 4%,
+      transparent 46%
     );
   }
 
   [data-hero][data-hero-phase="docked"] .pcb-card {
-    border-radius: 0.75rem;
-    aspect-ratio: 0.76;
+    border-radius: 1rem;
+    aspect-ratio: 0.72;
   }
 
   [data-hero][data-hero-phase="docked"] .hero-meta {
-    order: 4;
-    margin-top: 0.25rem;
+    order: 3;
+    margin-top: 0.35rem;
     width: 100%;
     text-align: center;
   }

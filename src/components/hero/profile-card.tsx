@@ -57,13 +57,14 @@ const CSS = `
   background:color-mix(in srgb, #14120e 55%, transparent); backdrop-filter:blur(10px); }
 @media (max-width:767px){
   .pcb-behind{ inset:-5%; filter:blur(36px) saturate(1.05); }
-  .pcb-name{ left:.9rem; right:.9rem; bottom:4.2rem; }
-  .pcb-name h3{ font-size:1.55rem; }
-  .pcb-name p{ font-size:.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .pcb-bar{ inset-inline:.65rem; bottom:.65rem; gap:.45rem; padding:.45rem .5rem; }
+  .pcb-name{ left:.95rem; right:.95rem; bottom:4.35rem; }
+  .pcb-name h3{ font-size:1.65rem; }
+  .pcb-name p{ font-size:.72rem; letter-spacing:.06em; }
+  .pcb-bar{ inset-inline:.65rem; bottom:.65rem; gap:.4rem; padding:.45rem .5rem; }
+  .pcb-id{ min-width:0; flex:1 1 auto; }
   .pcb-handle{ font-size:.72rem; }
   .pcb-status{ font-size:.64rem; }
-  .pcb-btn{ font-size:.68rem; padding:.4rem .75rem; flex:0 0 auto; }
+  .pcb-btn{ font-size:.68rem; padding:.4rem .7rem; flex:0 0 auto; white-space:nowrap; }
   .pcb-corner{ font-size:.6rem; }
   .pcb-top{ padding:.75rem .85rem; }
 }
