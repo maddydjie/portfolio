@@ -177,7 +177,7 @@ export function ContactBoard({
         </div>
       </section>
 
-      {/* Reach — paper band with scroll choreography */}
+      {/* Reach — looser paper band, same copy as desktop */}
       <section
         ref={reachRef}
         id="reach"
@@ -189,7 +189,7 @@ export function ContactBoard({
             <div className="max-w-lg">
               <p
                 data-reach-eye
-                className="font-mono text-accent text-small tracking-[0.2em]"
+                className="font-mono text-accent text-small tracking-[0.16em]"
               >
                 <DecryptedText text="CONTACT" startOnView />
               </p>
@@ -207,43 +207,34 @@ export function ContactBoard({
               <span
                 data-reach-rule
                 aria-hidden="true"
-                className="mt-6 block h-px w-20 origin-left bg-accent md:mt-8"
+                className="mt-6 block h-px w-16 origin-left bg-accent/70 md:mt-8"
               />
             </div>
 
-            <div
-              data-reach-mail
-              className="relative border border-foreground/28 bg-[color-mix(in_srgb,var(--color-background)_78%,var(--color-accent)_14%)] px-5 py-5 shadow-[0_16px_40px_-28px_rgba(40,20,16,0.35)] md:px-6 md:py-6"
-            >
-              <div
-                aria-hidden="true"
-                className="absolute top-0 left-0 h-full w-[3px] bg-accent"
-              />
-              <p className="font-mono text-[0.7rem] tracking-[0.18em] text-accent">
-                Email
-              </p>
+            <div data-reach-mail className="max-w-md">
+              <p className="text-small text-muted-foreground">Email</p>
               <a
                 href={`mailto:${CONTACT.email}`}
-                className="mt-2 block break-all font-mono text-[clamp(1.2rem,3.2vw,1.85rem)] leading-tight text-foreground transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                className="mt-1.5 block break-all font-serif text-[clamp(1.35rem,3.4vw,1.9rem)] leading-tight text-foreground underline decoration-accent/40 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
               >
                 {CONTACT.email}
               </a>
-              <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 font-mono text-small">
+              <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-small">
                 <button
                   type="button"
                   data-copy
                   data-reach-action
                   onClick={copyEmail}
-                  className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.97]"
+                  className="text-accent underline-offset-4 transition-colors hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.97]"
                 >
-                  [ {copied ? "Copied" : "Copy"} ]
+                  {copied ? "Copied" : "Copy email"}
                 </button>
                 <a
                   data-reach-action
                   href={`mailto:${CONTACT.email}`}
-                  className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  [ Open mail ]
+                  Open mail
                 </a>
               </div>
             </div>
@@ -251,29 +242,29 @@ export function ContactBoard({
 
           <div className="mt-12 grid gap-10 border-border border-t pt-10 md:mt-16 md:grid-cols-2 md:gap-14 md:pt-14">
             <div data-reach-panel>
-              <h2 className="font-serif text-[clamp(1.55rem,3vw,2rem)] leading-none tracking-[-0.02em]">
+              <h2 className="font-serif text-[clamp(1.45rem,3vw,1.85rem)] leading-none tracking-[-0.02em]">
                 Elsewhere
               </h2>
-              <ul className="mt-5 space-y-2">
+              <ul className="mt-4 divide-y divide-border border-border border-y">
                 {ELSEWHERE.map((item) => (
                   <li key={item.href} data-reach-row>
                     <a
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center justify-between gap-4 border border-foreground/28 bg-[color-mix(in_srgb,var(--color-background)_94%,var(--color-foreground)_4%)] px-4 py-3.5 text-foreground shadow-[0_10px_28px_-24px_rgba(40,20,16,0.4)] transition-[background-color,border-color,color,transform,box-shadow] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg hover:shadow-[0_18px_36px_-22px_rgba(20,18,14,0.55)] focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-5 md:py-4"
+                      className="group flex items-baseline justify-between gap-4 py-4 text-foreground transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <span className="min-w-0">
-                        <span className="block font-serif text-[1.15rem] leading-none md:text-[1.35rem]">
+                        <span className="block text-[1.05rem] leading-none md:text-[1.15rem]">
                           {item.label}
                         </span>
-                        <span className="mt-1.5 block font-mono text-[0.72rem] tracking-[0.06em] text-muted-foreground transition-colors duration-220 group-hover:text-hero-accent group-focus-visible:text-hero-accent group-active:text-hero-accent">
+                        <span className="mt-1.5 block font-mono text-[0.72rem] tracking-[0.04em] text-muted-foreground transition-colors group-hover:text-accent">
                           {item.handle}
                         </span>
                       </span>
                       <span
                         aria-hidden="true"
-                        className="shrink-0 font-mono text-accent text-small transition-[color,transform] duration-220 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-hero-accent group-focus-visible:text-hero-accent group-active:text-hero-accent"
+                        className="shrink-0 text-accent text-small transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                       >
                         ↗
                       </span>
@@ -284,26 +275,26 @@ export function ContactBoard({
             </div>
 
             <div data-reach-panel>
-              <h2 className="font-serif text-[clamp(1.55rem,3vw,2rem)] leading-none tracking-[-0.02em]">
+              <h2 className="font-serif text-[clamp(1.45rem,3vw,1.85rem)] leading-none tracking-[-0.02em]">
                 On this page
               </h2>
-              <ul className="mt-5 grid grid-cols-2 gap-2">
-                {PAGE_LINKS.map(([label, href]) => (
-                  <li key={href} data-reach-row>
+              <ul className="mt-4 flex flex-wrap gap-x-1 gap-y-2">
+                {PAGE_LINKS.map(([label, href], i) => (
+                  <li key={href} data-reach-row className="flex items-center">
                     <Link
                       href={href}
-                      className="group flex h-full items-center justify-between gap-2 border border-foreground/28 bg-[color-mix(in_srgb,var(--color-background)_94%,var(--color-foreground)_4%)] px-3 py-3 text-foreground shadow-[0_10px_28px_-24px_rgba(40,20,16,0.4)] transition-[background-color,border-color,color,transform,box-shadow] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg hover:shadow-[0_18px_36px_-22px_rgba(20,18,14,0.55)] focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-4 md:py-3.5"
+                      className="text-[0.98rem] text-foreground underline decoration-transparent underline-offset-4 transition-colors hover:text-accent hover:decoration-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      <span className="font-serif text-[0.95rem] leading-tight md:text-body">
-                        {label}
-                      </span>
+                      {label}
+                    </Link>
+                    {i < PAGE_LINKS.length - 1 ? (
                       <span
                         aria-hidden="true"
-                        className="shrink-0 font-mono text-muted-foreground text-small transition-[color,transform] duration-220 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-hero-accent group-focus-visible:text-hero-accent group-active:text-hero-accent"
+                        className="mx-2 text-muted-foreground/50"
                       >
-                        ↗
+                        /
                       </span>
-                    </Link>
+                    ) : null}
                   </li>
                 ))}
               </ul>

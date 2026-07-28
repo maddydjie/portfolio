@@ -157,19 +157,26 @@
     letter-spacing: 0.16em;
   }
 
-  /* Tagline already said its piece on the way in — drop it once docked. */
   [data-hero][data-hero-phase="docked"] .hero-tagline {
-    display: none !important;
+    order: 2;
+    display: block;
+    margin-top: 0.25rem;
+    margin-inline: auto;
+    max-width: 18ch;
+    font-size: clamp(1.05rem, 4vw, 1.25rem);
+    line-height: 1.2;
+    padding-bottom: 0.15rem;
+    text-align: center;
   }
 
   [data-hero][data-hero-phase="docked"] .hero-photo {
-    order: 2;
+    order: 3;
     display: block;
-    width: min(18.5rem, 82vw, calc(52dvh * 0.72));
-    max-width: min(18.5rem, 82vw, calc(52dvh * 0.72));
+    width: min(17.25rem, 78vw, calc(46dvh * 0.72));
+    max-width: min(17.25rem, 78vw, calc(46dvh * 0.72));
     margin-inline: auto;
-    margin-top: 0.45rem;
-    margin-bottom: 0.2rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.15rem;
     align-self: center;
     flex-shrink: 0;
   }
@@ -195,8 +202,8 @@
   }
 
   [data-hero][data-hero-phase="docked"] .hero-meta {
-    order: 3;
-    margin-top: 0.35rem;
+    order: 4;
+    margin-top: 0.3rem;
     width: 100%;
     text-align: center;
   }

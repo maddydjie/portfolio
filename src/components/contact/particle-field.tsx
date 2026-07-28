@@ -379,16 +379,13 @@ export function ParticleField({
       ref={wrapRef}
       role="button"
       tabIndex={0}
-      aria-label="Word animation. Tap or click to change word."
+      aria-label="Animated word. Click or tap to change."
       className={`relative w-full cursor-crosshair overflow-hidden bg-hero-bg outline-none focus-visible:ring-2 focus-visible:ring-hero-accent focus-visible:ring-offset-2 focus-visible:ring-offset-hero-bg ${className}`}
     >
       <canvas ref={canvasRef} className="block h-full w-full" />
       <span ref={labelRef} className="sr-only">
         {words[0]}
       </span>
-      <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 font-mono text-[0.7rem] tracking-[0.14em] text-hero-muted md:bottom-4 md:text-[0.65rem] md:tracking-[0.16em]">
-        Tap to change word
-      </p>
     </div>
   );
 }

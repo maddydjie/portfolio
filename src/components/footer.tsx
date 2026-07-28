@@ -46,7 +46,7 @@ export function Footer() {
       <div className="mx-auto max-w-wide px-5 py-10 md:px-6 md:py-section-sm">
         <div
           data-footer-panel
-          className="border border-foreground/28 bg-[color-mix(in_srgb,var(--color-background)_92%,var(--color-foreground)_5%)] px-5 py-5 shadow-[0_14px_36px_-26px_rgba(40,20,16,0.4)] md:flex md:items-end md:justify-between md:gap-10 md:px-7 md:py-6"
+          className="md:flex md:items-end md:justify-between md:gap-10"
         >
           <div>
             <p className="font-serif text-h3">Madhavi</p>
