@@ -213,7 +213,7 @@ export function ContactBoard({
 
             <div
               data-reach-mail
-              className="relative border border-border bg-[color-mix(in_srgb,var(--color-background)_88%,var(--color-accent)_4%)] px-5 py-5 md:px-6 md:py-6"
+              className="relative border border-foreground/18 bg-[color-mix(in_srgb,var(--color-background)_86%,var(--color-accent)_8%)] px-5 py-5 md:px-6 md:py-6"
             >
               <div
                 aria-hidden="true"
@@ -261,19 +261,19 @@ export function ContactBoard({
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center justify-between gap-4 border border-border px-4 py-3.5 transition-[border-color,background-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-accent/45 hover:bg-[color-mix(in_srgb,var(--color-background)_92%,var(--color-accent)_6%)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] md:px-5 md:py-4"
+                      className="group flex items-center justify-between gap-4 border border-foreground/18 bg-background px-4 py-3.5 text-foreground transition-[background-color,border-color,color,transform] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-5 md:py-4"
                     >
                       <span className="min-w-0">
                         <span className="block font-serif text-[1.15rem] leading-none md:text-[1.35rem]">
                           {item.label}
                         </span>
-                        <span className="mt-1.5 block font-mono text-[0.72rem] tracking-[0.06em] text-muted-foreground transition-colors group-hover:text-accent">
+                        <span className="mt-1.5 block font-mono text-[0.72rem] tracking-[0.06em] text-muted-foreground transition-colors duration-220 group-hover:text-hero-accent group-focus-visible:text-hero-accent group-active:text-hero-accent">
                           {item.handle}
                         </span>
                       </span>
                       <span
                         aria-hidden="true"
-                        className="shrink-0 font-mono text-accent text-small transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        className="shrink-0 font-mono text-accent text-small transition-[color,transform] duration-220 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-hero-accent group-focus-visible:text-hero-accent group-active:text-hero-accent"
                       >
                         ↗
                       </span>
@@ -292,14 +292,14 @@ export function ContactBoard({
                   <li key={href} data-reach-row>
                     <Link
                       href={href}
-                      className="group flex h-full items-center justify-between gap-2 border border-border px-3 py-3 transition-[border-color,background-color,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-accent/45 hover:bg-[color-mix(in_srgb,var(--color-background)_92%,var(--color-accent)_6%)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] md:px-4 md:py-3.5"
+                      className="group flex h-full items-center justify-between gap-2 border border-foreground/18 bg-background px-3 py-3 text-foreground transition-[background-color,border-color,color,transform] duration-220 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-hero-bg hover:bg-hero-bg hover:text-hero-fg focus-visible:border-hero-bg focus-visible:bg-hero-bg focus-visible:text-hero-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-[0.99] active:border-hero-bg active:bg-hero-bg active:text-hero-fg md:px-4 md:py-3.5"
                     >
                       <span className="font-serif text-[0.95rem] leading-tight md:text-body">
                         {label}
                       </span>
                       <span
                         aria-hidden="true"
-                        className="shrink-0 font-mono text-muted-foreground text-small transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent"
+                        className="shrink-0 font-mono text-muted-foreground text-small transition-[color,transform] duration-220 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-hero-accent group-focus-visible:text-hero-accent group-active:text-hero-accent"
                       >
                         ↗
                       </span>
