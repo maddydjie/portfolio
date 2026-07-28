@@ -56,13 +56,14 @@ const CSS = `
   border:1px solid color-mix(in srgb,var(--color-hero-muted) 22%,transparent);
   background:color-mix(in srgb, #14120e 55%, transparent); backdrop-filter:blur(10px); }
 @media (max-width:767px){
-  .pcb-name{ left:.85rem; bottom:4.1rem; }
-  .pcb-name h3{ font-size:1.45rem; }
-  .pcb-name p{ font-size:.68rem; }
-  .pcb-bar{ inset-inline:.55rem; bottom:.55rem; gap:.4rem; padding:.4rem .45rem; }
-  .pcb-handle{ font-size:.7rem; }
-  .pcb-status{ font-size:.62rem; }
-  .pcb-btn{ font-size:.65rem; padding:.38rem .65rem; }
+  .pcb-behind{ inset:-5%; filter:blur(36px) saturate(1.05); }
+  .pcb-name{ left:.9rem; right:.9rem; bottom:4.2rem; }
+  .pcb-name h3{ font-size:1.55rem; }
+  .pcb-name p{ font-size:.7rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pcb-bar{ inset-inline:.65rem; bottom:.65rem; gap:.45rem; padding:.45rem .5rem; }
+  .pcb-handle{ font-size:.72rem; }
+  .pcb-status{ font-size:.64rem; }
+  .pcb-btn{ font-size:.68rem; padding:.4rem .75rem; flex:0 0 auto; }
   .pcb-corner{ font-size:.6rem; }
   .pcb-top{ padding:.75rem .85rem; }
 }
@@ -183,7 +184,7 @@ export function ProfileCard({
             alt={`${name} portrait`}
             fill
             priority
-            sizes="(max-width: 768px) 70vw, 360px"
+            sizes="(max-width: 768px) 84vw, 360px"
             className="object-cover object-[center_18%]"
           />
         </div>
