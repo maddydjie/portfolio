@@ -55,6 +55,17 @@ const CSS = `
   justify-content:space-between; gap:.6rem; padding:.5rem .55rem .5rem .6rem; border-radius:.7rem;
   border:1px solid color-mix(in srgb,var(--color-hero-muted) 22%,transparent);
   background:color-mix(in srgb, #14120e 55%, transparent); backdrop-filter:blur(10px); }
+@media (max-width:767px){
+  .pcb-name{ left:.85rem; bottom:4.1rem; }
+  .pcb-name h3{ font-size:1.45rem; }
+  .pcb-name p{ font-size:.68rem; }
+  .pcb-bar{ inset-inline:.55rem; bottom:.55rem; gap:.4rem; padding:.4rem .45rem; }
+  .pcb-handle{ font-size:.7rem; }
+  .pcb-status{ font-size:.62rem; }
+  .pcb-btn{ font-size:.65rem; padding:.38rem .65rem; }
+  .pcb-corner{ font-size:.6rem; }
+  .pcb-top{ padding:.75rem .85rem; }
+}
 .pcb-id{ display:flex; align-items:center; gap:.55rem; }
 .pcb-mini{ width:2rem; height:2rem; border-radius:999px; overflow:hidden; flex:0 0 auto;
   border:1px solid color-mix(in srgb,var(--color-hero-muted) 30%,transparent); }
@@ -84,6 +95,7 @@ export function ProfileCard({
   status = "Available",
   contactText = "Contact",
   onContactClick,
+  className = "",
 }: {
   name?: string;
   title?: string;
@@ -91,6 +103,7 @@ export function ProfileCard({
   status?: string;
   contactText?: string;
   onContactClick?: () => void;
+  className?: string;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -158,11 +171,21 @@ export function ProfileCard({
   const mini = useMemo(() => src, []);
 
   return (
-    <div ref={wrapRef} className="pcb-wrap mx-auto w-[min(78vw,22rem)]">
+    <div
+      ref={wrapRef}
+      className={`pcb-wrap mx-auto w-full max-w-[22rem] ${className}`.trim()}
+    >
       <div className="pcb-behind" />
       <div ref={cardRef} className="pcb-card">
         <div className="pcb-layer pcb-photo">
-          <Image src={src} alt={`${name} portrait`} fill priority sizes="360px" />
+          <Image
+            src={src}
+            alt={`${name} portrait`}
+            fill
+            priority
+            sizes="(max-width: 768px) 70vw, 360px"
+            className="object-cover object-[center_18%]"
+          />
         </div>
         <div className="pcb-layer pcb-vignette" />
         <div className="pcb-layer pcb-sheen" />

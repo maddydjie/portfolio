@@ -159,9 +159,9 @@ export function HeroCombined() {
     <div ref={wrapRef} data-hero data-hero-phase="intro" className="bg-hero-bg text-hero-fg">
       <div
         data-stage
-        className="hero-stage relative flex h-[100svh] min-h-[100svh] w-full flex-col overflow-hidden px-6 md:h-screen md:min-h-0 md:justify-center md:py-0"
+        className="hero-stage relative flex min-h-[100dvh] w-full flex-col overflow-hidden px-6 md:h-screen md:min-h-0 md:justify-center md:py-0"
       >
-        <div className="hero-stack mx-auto flex w-full max-w-wide flex-1 flex-col items-center md:grid md:flex-none md:grid-cols-[1.12fr_0.88fr] md:items-center md:gap-14">
+        <div className="hero-stack mx-auto flex w-full max-w-wide flex-col items-center md:grid md:grid-cols-[1.12fr_0.88fr] md:items-center md:gap-14">
           <h1
             data-word
             className="hero-name text-center text-[clamp(3.25rem,16vw,4.85rem)] leading-[0.92] tracking-[-0.01em] will-change-transform md:col-start-1 md:row-start-2 md:justify-self-start md:text-left md:text-[clamp(2.5rem,7vw,6.5rem)]"
@@ -199,9 +199,10 @@ export function HeroCombined() {
           <div
             data-portrait
             data-reveal
-            className="hero-reveal hero-photo w-[min(12.75rem,48vw)] will-change-transform md:col-start-2 md:row-start-1 md:row-span-6 md:w-full md:max-w-none md:justify-self-end md:self-center"
+            className="hero-reveal hero-photo mx-auto w-[min(10.25rem,52vw)] will-change-transform md:col-start-2 md:row-start-1 md:row-span-6 md:mx-0 md:w-full md:max-w-[22rem] md:justify-self-end md:self-center"
           >
             <ProfileCard
+              className="mx-auto"
               name="Dr Madhavi"
               title="Clinician · Data Scientist"
               handle="maddydjie"
