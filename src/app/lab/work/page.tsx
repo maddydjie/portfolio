@@ -5,8 +5,10 @@ import { ExperienceCardSwap } from "@/components/work/experience-card-swap";
 import { ExperienceSpineStack } from "@/components/work/experience-journey";
 import { ExperienceSpineStepper } from "@/components/work/experience-spine-stepper";
 import { ProjectsBento } from "@/components/work/projects-bento";
-import { ProjectsDiptych } from "@/components/work/projects-diptych";
 import { ProjectsMasthead } from "@/components/work/projects-masthead";
+import { ProjectsOutcomeLedger } from "@/components/work/projects-outcome-ledger";
+import { ProjectsSignalStrip } from "@/components/work/projects-signal-strip";
+import { ProjectsSpineFlow } from "@/components/work/projects-spine-flow";
 import { ResearchDiptych } from "@/components/work/research-section";
 
 const EXP_VARIANTS = [
@@ -16,14 +18,16 @@ const EXP_VARIANTS = [
 ] as const;
 
 const PROJ_VARIANTS = [
-  { id: "masthead", label: "1 · Masthead" },
-  { id: "diptych", label: "2 · Diptych" },
-  { id: "bento", label: "3 · Bento" },
+  { id: "rails", label: "1 · Dual rail" },
+  { id: "spine", label: "2 · Spine flow" },
+  { id: "masthead", label: "3 · Case file" },
+  { id: "signal", label: "4 · Signal strip" },
+  { id: "ledger", label: "5 · Outcome ledger" },
 ] as const;
 
 export default function WorkLab() {
   const [exp, setExp] = useState<(typeof EXP_VARIANTS)[number]["id"]>("stack");
-  const [proj, setProj] = useState<(typeof PROJ_VARIANTS)[number]["id"]>("masthead");
+  const [proj, setProj] = useState<(typeof PROJ_VARIANTS)[number]["id"]>("rails");
 
   return (
     <main className="min-h-screen bg-background pb-48 text-foreground">
@@ -33,9 +37,11 @@ export default function WorkLab() {
 
       <ResearchDiptych />
 
+      {proj === "rails" ? <ProjectsBento /> : null}
+      {proj === "spine" ? <ProjectsSpineFlow /> : null}
       {proj === "masthead" ? <ProjectsMasthead /> : null}
-      {proj === "diptych" ? <ProjectsDiptych /> : null}
-      {proj === "bento" ? <ProjectsBento /> : null}
+      {proj === "signal" ? <ProjectsSignalStrip /> : null}
+      {proj === "ledger" ? <ProjectsOutcomeLedger /> : null}
 
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 px-3 py-3 backdrop-blur-sm">
         <div className="mx-auto flex max-w-wide flex-col items-center gap-2">

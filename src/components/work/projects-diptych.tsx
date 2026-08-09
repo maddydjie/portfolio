@@ -7,6 +7,7 @@ import {
   PROJECT_DIPTYCHS,
   PROJECTS,
   PROJECTS_HEADLINE,
+  projectMeta,
   type ProjectCard,
 } from "@/content/projects";
 import { gsap, registerGsap } from "@/lib/gsap";
@@ -15,7 +16,7 @@ import { prefersReducedMotion } from "@/lib/motion";
 function Cell({ project }: { project: ProjectCard }) {
   return (
     <article data-dip className="border border-border bg-surface p-5 md:p-6">
-      <p className="font-mono text-accent text-small">{project.meta}</p>
+      <p className="font-mono text-accent text-small">{projectMeta(project)}</p>
       <h3 className="mt-2 font-serif text-h3">{project.title}</h3>
       {project.result && (
         <p className="mt-2 font-mono text-accent text-[0.72rem]">{project.result}</p>

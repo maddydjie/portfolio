@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { registerGsap, ScrollTrigger } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 
 /**
@@ -90,9 +91,12 @@ function sampleGlyph(w: number, h: number, text: string, step: number): Array<[n
 export function ParticleField({
   words = ["BRIDGE", "PULSE", "SHIP"],
   className = "",
+  /** Advance words as the band scrolls through the viewport (keeps click/tap). */
+  cycleOnScroll = false,
 }: {
   words?: readonly string[];
   className?: string;
+  cycleOnScroll?: boolean;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -118,6 +122,7 @@ export function ParticleField({
     let my = -9999;
     let running = true;
     let lastCycle = 0;
+    let scrollTrigger: { kill: () => void } | null = null;
     let morphTimer = 0;
     let springMul = 1;
     let reformingUntil = 0;
@@ -234,14 +239,18 @@ export function ParticleField({
       if (first) applyWord(first, true);
     };
 
-    const advanceWord = () => {
+    const goToWord = (nextIndex: number, force = false) => {
       if (words.length < 2) return;
+      const idx = ((nextIndex % words.length) + words.length) % words.length;
+      if (idx === wordIndex) return;
       const now = performance.now();
-      if (now - lastCycle < CYCLE_COOLDOWN) return;
+      if (!force && now - lastCycle < CYCLE_COOLDOWN) return;
       lastCycle = now;
-      wordIndex = (wordIndex + 1) % words.length;
+      wordIndex = idx;
       const next = words[wordIndex];
       if (!next) return;
+
+      if (labelRef.current) labelRef.current.textContent = next;
 
       // Scatter first, then spring into the next letterforms.
       window.clearTimeout(morphTimer);
@@ -251,6 +260,10 @@ export function ParticleField({
         springMul = 1.45;
         reformingUntil = performance.now() + 700;
       }, BURST_MS);
+    };
+
+    const advanceWord = () => {
+      goToWord(wordIndex + 1);
     };
 
     const onMove = (e: PointerEvent) => {
@@ -356,6 +369,23 @@ export function ParticleField({
         wrap.addEventListener("pointerup", onPointerUp);
         wrap.addEventListener("keydown", onKey);
         window.addEventListener("resize", resize);
+
+        // Scroll progress through the band maps to word index (BUILD → SHIP → …).
+        if (cycleOnScroll && words.length > 1) {
+          registerGsap();
+          scrollTrigger = ScrollTrigger.create({
+            trigger: wrap,
+            start: "top 75%",
+            end: "bottom 25%",
+            onUpdate: (self) => {
+              const idx = Math.min(
+                words.length - 1,
+                Math.max(0, Math.floor(self.progress * words.length)),
+              );
+              goToWord(idx, true);
+            },
+          });
+        }
       }
     });
 
@@ -364,6 +394,8 @@ export function ParticleField({
       cancelAnimationFrame(boot);
       cancelAnimationFrame(raf);
       window.clearTimeout(morphTimer);
+      scrollTrigger?.kill();
+      scrollTrigger = null;
       particles = [];
       wrap.removeEventListener("pointermove", onMove);
       wrap.removeEventListener("pointerleave", onLeave);
@@ -371,7 +403,7 @@ export function ParticleField({
       wrap.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", resize);
     };
-  }, [words]);
+  }, [words, cycleOnScroll]);
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: interactive canvas surface has non-phrasing children, so a real <button> is invalid here.
@@ -379,7 +411,7 @@ export function ParticleField({
       ref={wrapRef}
       role="button"
       tabIndex={0}
-      aria-label="Animated word. Click or tap to change."
+      aria-label="Animated word. Scroll, click, or tap to change."
       className={`relative w-full cursor-crosshair overflow-hidden bg-hero-bg outline-none focus-visible:ring-2 focus-visible:ring-hero-accent focus-visible:ring-offset-2 focus-visible:ring-offset-hero-bg ${className}`}
     >
       <canvas ref={canvasRef} className="block h-full w-full" />

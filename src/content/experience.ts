@@ -3,10 +3,12 @@ export type ExperienceRole = {
   title: string;
   org: string;
   dates: string;
-  kind: "lead" | "continuity" | "clinical-base" | "row";
+  kind: "lead" | "continuity" | "clinical-base" | "row" | "freelance";
   summary?: string;
   bullets?: string[];
   proof?: string;
+  /** Short engagement label shown above the title when set. */
+  engagement?: string;
 };
 
 export const EXPERIENCE_ROLES: ExperienceRole[] = [
@@ -14,23 +16,38 @@ export const EXPERIENCE_ROLES: ExperienceRole[] = [
     id: "nference-ft",
     title: "Junior Clinical Data Scientist",
     org: "nference",
-    dates: "Apr 2026 – Present",
+    dates: "Apr 2026 - Present",
     kind: "lead",
     summary:
       "Full-time clinical data science on oncology note extraction and multi-site cohort analysis.",
     bullets: [
       "Extract and classify clinical attributes from oncology notes to support patient cohort studies.",
-      "Build SQL cohort pipelines across five Academic Medical Center environments — Mayo Clinic, Duke, VUMC, Emory, and Mercy — on de-identified longitudinal EHR data.",
+      "Build SQL cohort pipelines across five Academic Medical Center environments - Mayo Clinic, Duke, VUMC, Emory, and Mercy - on de-identified longitudinal EHR data.",
       "Design LLM prompt-engineering pipelines in Python for structured extraction; validate against clinician-annotated gold sets and track precision/recall by site.",
       "Own clinical validation workflows: error analysis, edge-case characterization, and feedback loops with clinical reviewers.",
     ],
     proof: "5 AMCs · clinical validation",
   },
   {
+    id: "stealth-wearable",
+    title: "Multi-wearable Physiological Intelligence",
+    org: "Stealth",
+    dates: "Apr 2026 - Jul 2026",
+    kind: "freelance",
+    engagement: "Freelance",
+    summary:
+      "Designed correlations for multi-wearable longitudinal physiological intelligence at a stealth wearable startup.",
+    bullets: [
+      "Designed correlation layers across multi-wearable physiological streams for longitudinal signal intelligence.",
+      "Shaped features that stay useful over time, not one-off dashboard metrics.",
+    ],
+    proof: "Multi-wearable · correlations",
+  },
+  {
     id: "nference-intern",
     title: "Junior Clinical Data Scientist (Intern)",
     org: "nference",
-    dates: "Oct 2025 – Apr 2026",
+    dates: "Oct 2025 - Apr 2026",
     kind: "continuity",
     summary: "Promoted from intern to full-time on the same clinical data science track.",
   },
@@ -38,10 +55,10 @@ export const EXPERIENCE_ROLES: ExperienceRole[] = [
     id: "amc",
     title: "Clinical Intern",
     org: "Andhra Medical College",
-    dates: "Apr 2025 – Mar 2026",
+    dates: "Apr 2025 - Mar 2026",
     kind: "clinical-base",
     summary:
-      "Bedside clinical training — the healthcare base under every model and pipeline since.",
+      "Bedside clinical training - the healthcare base under every model and pipeline since.",
     bullets: [
       "Rotating clinical exposure across real hospital workflows, notes, and decision-making under supervision.",
       "Ground truth for why clinical AI must survive messy data, not demo datasets.",
@@ -51,17 +68,17 @@ export const EXPERIENCE_ROLES: ExperienceRole[] = [
     id: "dexter",
     title: "ML Engineer Intern",
     org: "DEXTER",
-    dates: "Feb 2025 – Mar 2025",
+    dates: "Feb 2025 - Mar 2025",
     kind: "row",
     summary:
-      "TensorFlow CNN for pneumonia detection from chest X-rays — full pipeline from augmentation through evaluation; ~90% test accuracy.",
+      "TensorFlow CNN for pneumonia detection from chest X-rays - full pipeline from augmentation through evaluation; ~90% test accuracy.",
     proof: "~90% CXR accuracy",
   },
   {
     id: "animations",
     title: "Business Operations Intern",
     org: "Animations Media (London)",
-    dates: "Jan 2025 – Feb 2025",
+    dates: "Jan 2025 - Feb 2025",
     kind: "row",
     summary:
       "Healthcare-domain operations: sourced 100+ qualified leads and tightened lead-management workflow across US/UK healthcare commercial channels.",
@@ -71,8 +88,9 @@ export const EXPERIENCE_ROLES: ExperienceRole[] = [
 /** Reverse-chron journey beats for sticky / spine / hybrid layouts. */
 export const EXPERIENCE_JOURNEY: ExperienceRole[] = [
   EXPERIENCE_ROLES[0], // nference FT
-  EXPERIENCE_ROLES[1], // nference intern
-  EXPERIENCE_ROLES[2], // AMC
-  EXPERIENCE_ROLES[3], // DEXTER
-  EXPERIENCE_ROLES[4], // Animations
+  EXPERIENCE_ROLES[1], // stealth freelance
+  EXPERIENCE_ROLES[2], // nference intern
+  EXPERIENCE_ROLES[3], // AMC
+  EXPERIENCE_ROLES[4], // DEXTER
+  EXPERIENCE_ROLES[5], // Animations
 ];

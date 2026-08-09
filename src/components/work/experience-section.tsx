@@ -32,7 +32,9 @@ export function ExperienceSection() {
   const lead = EXPERIENCE_ROLES.find((r) => r.kind === "lead");
   const continuity = EXPERIENCE_ROLES.find((r) => r.kind === "continuity");
   const amc = EXPERIENCE_ROLES.find((r) => r.kind === "clinical-base");
-  const rows = EXPERIENCE_ROLES.filter((r) => r.kind === "row");
+  const rows = EXPERIENCE_ROLES.filter(
+    (r) => r.kind === "row" || r.kind === "freelance",
+  );
 
   return (
     <section ref={rootRef} className="bg-background px-6 py-24 text-foreground md:py-28">
@@ -77,7 +79,7 @@ export function ExperienceSection() {
                 {continuity.org}
                 {" · "}
                 {continuity.dates}
-                {" — "}
+                {" - "}
                 {continuity.summary}
               </p>
             )}
@@ -128,6 +130,11 @@ export function ExperienceSection() {
               className="flex flex-col gap-2 border-border border-b py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
             >
               <div className="min-w-0">
+                {r.engagement ? (
+                  <p className="mb-1.5 font-mono text-[0.68rem] tracking-[0.14em] uppercase text-accent">
+                    {r.engagement}
+                  </p>
+                ) : null}
                 <h3 className="font-serif text-h3">{r.title}</h3>
                 <p className="mt-1 font-mono text-small text-muted-foreground">
                   {r.org}

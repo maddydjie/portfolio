@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { BlurText } from "@/components/text/blur-text";
-import { PROJECTS, PROJECTS_HEADLINE, type ProjectCard } from "@/content/projects";
+import {
+  PROJECTS,
+  PROJECTS_HEADLINE,
+  projectMeta,
+  type ProjectCard,
+} from "@/content/projects";
 import { gsap, registerGsap } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 
@@ -18,7 +23,9 @@ function Row({ project }: { project: ProjectCard }) {
         aria-expanded={open}
       >
         <span className="font-serif text-h3">{project.title}</span>
-        <span className="font-mono text-muted-foreground text-small">{project.meta}</span>
+        <span className="font-mono text-muted-foreground text-small">
+          {projectMeta(project)}
+        </span>
       </button>
       {project.result ? (
         <p className="mt-1 font-mono text-accent text-[0.72rem]">{project.result}</p>
@@ -106,7 +113,7 @@ export function ProjectsMasthead() {
             data-proj-mast
             className="mt-12 border border-border bg-surface px-6 py-8 md:px-10 md:py-10"
           >
-            <p className="font-mono text-accent text-small">{hero.meta}</p>
+            <p className="font-mono text-accent text-small">{projectMeta(hero)}</p>
             <h3 className="mt-2 font-serif text-[clamp(2rem,4vw,3.25rem)] leading-none">
               {hero.title}
             </h3>

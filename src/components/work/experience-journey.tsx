@@ -77,7 +77,19 @@ function RoleCard({
         <p className={`font-mono text-small ${tone.muted}`}>{role.dates}</p>
       </div>
 
-      <h3 data-line className="mt-3 font-serif text-h3 leading-tight">
+      {role.engagement ? (
+        <p
+          data-line
+          className={`mt-3 font-mono text-[0.68rem] tracking-[0.14em] uppercase ${tone.org}`}
+        >
+          {role.engagement}
+        </p>
+      ) : null}
+
+      <h3
+        data-line
+        className={`font-serif text-h3 leading-tight ${role.engagement ? "mt-1.5" : "mt-3"}`}
+      >
         {role.title}
       </h3>
       <p data-line className={`mt-2 font-mono text-small ${tone.org}`}>

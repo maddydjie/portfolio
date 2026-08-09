@@ -9,8 +9,8 @@ import { CONTACT } from "@/content/contact";
 import { gsap, registerGsap, ScrollTrigger } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
 
-/** Kinetic band words — short enough to read on a phone band. */
-const PARTICLE_WORDS = ["CARE", "BUILD", "BRIDGE", "SHIP"] as const;
+/** Kinetic band words — short enough to read on a phone band. Scroll maps BUILD → SHIP first. */
+const PARTICLE_WORDS = ["BUILD", "SHIP", "CARE", "BRIDGE"] as const;
 
 const PAGE_LINKS = [
   ["Education", "/#education"],
@@ -172,6 +172,7 @@ export function ContactBoard({
         <div className="mt-5 md:mt-7">
           <ParticleField
             words={PARTICLE_WORDS}
+            cycleOnScroll
             className="h-[clamp(9.5rem,34vw,14rem)] w-full md:h-[clamp(14rem,40vh,26rem)]"
           />
         </div>
