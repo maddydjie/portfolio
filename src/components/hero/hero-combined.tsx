@@ -165,7 +165,7 @@ export function HeroCombined() {
             data-word
             className="hero-name text-center text-[clamp(3.25rem,16vw,4.85rem)] leading-[0.92] tracking-[-0.01em] will-change-transform md:col-start-1 md:row-start-2 md:justify-self-start md:text-left md:text-[clamp(2.5rem,7vw,6.5rem)]"
           >
-            <span className="pr-[0.14em] font-serif italic font-normal">Dr</span>
+            <span className="pr-[0.14em] font-serif italic font-normal">Dr.</span>
             <span className="font-serif">Madh</span>
             <span className="font-mono">avi</span>
           </h1>
